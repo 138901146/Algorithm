@@ -1,27 +1,19 @@
 #include<stdio.h>
+main() {
+	int N,p=1,s=1, c,i,f;
 
-int main(void)
-{
-	int N, primary_K=1, secondary_K=1, card, index, initial;
+	scanf("%d%d",&N,&f);
 
-	scanf("%d", &N);
-	scanf("%d", &initial);
-
-	for(int i=1;i<N;i++)
-	{
-		scanf("%d", &card);
-		if(card==N)
-		{
-			index=i;
+	for(int n=1;n<N;n++) {
+		scanf("%d", &c);
+		if(c==N) {
+			i=n;
 			break;
 		}
 	}
 
-	while(1<<primary_K<N-initial)
-		primary_K++;
-	while(1<<secondary_K<index)
-		secondary_K++;
+	while(1<<p<N-f) p++;
+	while(1<<s<i) s++;
 
-	printf("%d %d\n", primary_K, secondary_K);
-	return 0;
+	printf("%d %d\n",p,s);
 }
