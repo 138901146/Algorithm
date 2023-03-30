@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 public class Main {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb=new StringBuilder();
 		
 		int N;
 		long[][] method=new long[31][31];
@@ -17,8 +18,10 @@ public class Main {
 		
 		N=Integer.parseInt(br.readLine());
 		while(N>0) {
-			System.out.println(method[N][N]);
+			sb.append(method[N][N]+"\n");
 			N=Integer.parseInt(br.readLine());
 		}
+		
+		System.out.println(sb.toString());
 	}
 }
