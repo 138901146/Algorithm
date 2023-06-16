@@ -1,28 +1,25 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
 int main(void)
 {
-	int N, M, i, j, *arr=NULL, *accumulate=NULL;
+	int N, M, *sum=0, i, j;
 
 	scanf("%d%d", &N, &M);
-	arr=(int *)malloc(N*sizeof(int));
-	accumulate=(int *)calloc(N,sizeof(int));
+	sum=(int *)calloc(N+1,sizeof(int));
 
-	for(int n=0;n<N;n++)
+	for(int n=1;n<=N;n++)
 	{
-		scanf("%d", &arr[n]);
-		accumulate[n]=arr[n];
+		scanf("%d", &sum[n]);
+		sum[n]+=sum[n-1];
 	}
-	for(int n=1;n<N;n++)
-		accumulate[n]+=accumulate[n-1];
 
 	for(int m=0;m<M;m++)
 	{
 		scanf("%d%d", &i, &j);
-		printf("%d\n", accumulate[j-1]-accumulate[i-1]+arr[i-1]);
+		printf("%d\n", sum[j]-sum[i-1]);
 	}
 
-	free(arr);
+	free(sum);
 	return 0;
 }
