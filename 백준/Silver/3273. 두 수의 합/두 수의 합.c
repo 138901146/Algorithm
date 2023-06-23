@@ -1,40 +1,30 @@
 #include<stdio.h>
-#include<stdlib.h>
-
-int compare(const void *x,const void *y)
-{
-	return *(int *)x>*(int *)y?1:*(int *)x==*(int *)y?0:-1;
-}
+#include<malloc.h>
+#include<stdbool.h>
 
 int main(void)
 {
-	int n, *a=NULL, x, left=0, right, count=0;
+	int n, *a=NULL, x, count=0;
+	bool *exist=NULL;
 
 	scanf("%d", &n);
 	a=(int *)malloc(n*sizeof(int));
-	right=n-1;
+	exist=(bool *)calloc(1000001,sizeof(bool));
 
 	for(int i=0;i<n;i++)
+	{
 		scanf("%d", &a[i]);
-	qsort((void *)a,(size_t)n,sizeof(int),compare);
+		exist[a[i]]=true;
+	}
 
 	scanf("%d", &x);
 
-	while(left<right)
-		if(a[left]+a[right]==x)
-		{
+	for(int i=0;i<n;i++)
+		if(x-a[i]>a[i] && x-a[i]>0 && x-a[i]<=1000000 && exist[x-a[i]])
 			count++;
-			if(a[left]==a[left+1])
-				left++;
-			else
-				right--;
-		}
-		else if(a[left]+a[right]<x)
-			left++;
-		else
-			right--;
 
 	printf("%d\n", count);
 	free(a);
+	free(exist);
 	return 0;
 }
