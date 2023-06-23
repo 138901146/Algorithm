@@ -1,42 +1,55 @@
 #include<stdio.h>
 #include<stdbool.h>
 
-bool isPrime(int N)
+long long sum[300000];
+
+bool is_prime(int n)
 {
-	if(N<2)
-		return false;
-	else if(N==2)
-		return true;
-	else if(N%2==0)
-		return false;
-	else
-		for(int i=3;i*i<=N;i+=2)
-			if(N%i==0)
-				return false;
+	for(int i=3;i*i<=n;i+=2)
+		if(n%i==0)
+			return false;
 	return true;
 }
 
 int main(void)
 {
-	int prime_count=1, prime[283146]={2, }, N, count=0;
+	int size=1, count=0;
+	long long N;
 
-	scanf("%d", &N);
+	scanf("%lld", &N);
 
+	sum[0]=0;
+	sum[1]=2;
 	for(int i=3;i<=N;i+=2)
-		if(isPrime(i))
-			prime[prime_count++]=i;
+		if(is_prime(i))
+		{
+			sum[size+1]=sum[size]+i;
+			size++;
+		}
 
-	for(int i=0;i<prime_count;i++)
+	for(int i=size;i>0 && sum[i]>=N;i--)
 	{
-		int sum=0;
+		int left=0, right=i, mid;
 
-		for(int j=0;sum<N;j++)
-			sum+=prime[i+j];
+		while(left<=right)
+		{
+			mid=(left+right)>>1;
 
-		count+=sum==N;
+			if(sum[i]-sum[mid]==N)
+				break;
+			else if(sum[i]-sum[mid]<N)
+				right=mid-1;
+			else
+				left=mid+1;
+		}
+
+		if(left<=right)
+		{
+			mid=(left+right)>>1;
+			count+=sum[i]-sum[mid]==N;
+		}
 	}
 
 	printf("%d\n", count);
-
 	return 0;
 }
