@@ -1,31 +1,35 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
 int main(void)
 {
-	long long int K, N, *lan=NULL, count=1, min=0, max=999999999999, mid;
+	int N, K, *lan=NULL;
+	unsigned long long left=0, right=2147483648, mid, ans, count;
 
-	scanf("%lld %lld", &K, &N);
-	lan=(long long int *)malloc(K*sizeof(long long int));
+	scanf("%d%d", &N, &K);
+	lan=(int *)malloc(N*sizeof(int));
 
-	for(int k=0;k<K;k++)
-		scanf("%lld", &lan[k]);
+	for(int n=0;n<N;n++)
+		scanf("%d", &lan[n]);
 
-	while((min+max)/2!=mid)
+	while(left<=right)
 	{
-		long long int num=0;
-		mid=(min+max)/2;
+		count=0;
+		mid=(left+right)>>1;
 
-		for(int k=0;k<K;k++)
-			num+=lan[k]/mid;
+		for(int n=0;n<N;n++)
+			count+=lan[n]/mid;
 
-		if(N>num)
-			max=mid;
+		if(count<K)
+			right=mid-1;
 		else
-			min=mid;
+		{
+			ans=mid;
+			left=mid+1;
+		}
 	}
 
-	printf("%lld\n", mid);
+	printf("%lld\n", ans);
 	free(lan);
 	return 0;
 }
