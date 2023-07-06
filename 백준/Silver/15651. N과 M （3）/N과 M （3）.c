@@ -1,31 +1,28 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-void N_M(int *A,int N,int M,int current)
+int arr[8], N, M;
+
+void N_M(int x)
 {
-	if(current==M)
+	if(x==M)
 	{
-		for(int m=0;m<M;m++)
-			printf("%d ", A[m]);
+		for(int i=0;i<M;i++)
+			printf("%d ", arr[i]);
 		printf("\n");
+		return;
 	}
-	else
-		for(int n=1;n<=N;n++)
-		{
-			A[current]=n;
-			N_M(A,N,M,current+1);
-		}
+
+	for(int i=1;i<=N;i++)
+	{
+		arr[x]=i;
+		N_M(x+1);
+	}
 }
 
 int main(void)
 {
-	int N, M, *A=NULL;
+	scanf("%d%d", &N, &M);
 
-	scanf("%d %d", &N, &M);
-	A=(int *)malloc(M*sizeof(int));
-
-	N_M(A,N,M,0);
-
-	free(A);
+	N_M(0);
 	return 0;
 }
