@@ -1,44 +1,40 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-void N_M(int *A,int *B,int N,int M,int current,int lastindex)
+int arr[8], N, M, NM[8];
+
+void N_M(int n,int m)
 {
-	if(current==M)
+	if(m==M)
 	{
-		for(int m=0;m<M;m++)
-			printf("%d ", A[m]);
+		for(int i=0;i<M;i++)
+			printf("%d ", NM[i]);
 		printf("\n");
+		return;
 	}
-	else
-		for(int n=lastindex+1;n<N;n++)
-		{
-			A[current]=B[n];
-			N_M(A,B,N,M,current+1,n);
-		}
+
+	for(int i=n;i<N;i++)
+	{
+		NM[m]=arr[i];
+		N_M(i+1,m+1);
+	}
 }
 
 int main(void)
 {
-	int N, M, *A=NULL, *B=NULL;
+	scanf("%d%d", &N, &M);
 
-	scanf("%d %d", &N, &M);
-	A=(int *)malloc(M*sizeof(int));
-	B=(int *)malloc(N*sizeof(int));
+	for(int i=0;i<N;i++)
+		scanf("%d", &arr[i]);
 
-	for(int n=0;n<N;n++)
-		scanf("%d", &B[n]);
-
-	for(int i=0;i<N-1;i++)
+	for(int i=0;i<N;i++)
 		for(int j=i+1;j<N;j++)
-			if(B[i]>B[j])
+			if(arr[i]>arr[j])
 			{
-				int temp=B[i];
-				B[i]=B[j];
-				B[j]=temp;
+				int temp=arr[i];
+				arr[i]=arr[j];
+				arr[j]=temp;
 			}
-	N_M(A,B,N,M,0,-1);
 
-	free(A);
-	free(B);
+	N_M(0,0);
 	return 0;
 }
