@@ -1,38 +1,39 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
-
-bool able(long long *tree,long long N,long long M,long long mid)
-{
-	long long sum=0;
-
-	for(long long n=0;n<N;n++)
-		sum+=tree[n]-mid>0?tree[n]-mid:0;
-
-	return sum>=M;
-}
+#include<malloc.h>
 
 int main(void)
 {
-	long long N, M, *tree=NULL, low=0, high=1000000000;
+	int N, M, *tree=NULL, left=0, right=0, mid, ans;
+	long long sum;
 
-	scanf("%lld%lld", &N, &M);
-	tree=(long long *)malloc(N*sizeof(long long));
+	scanf("%d%d", &N, &M);
+	tree=(int *)malloc(N*sizeof(int));
 
-	for(long long n=0;n<N;n++)
-		scanf("%lld", &tree[n]);
-
-	while(low<=high)
+	for(int n=0;n<N;n++)
 	{
-		long long mid=(low+high)/2;
-
-		if(able(tree,N,M,mid))
-			low=mid+1;
-		else
-			high=mid-1;
+		scanf("%d", &tree[n]);
+		right=tree[n]>right?tree[n]:right;
 	}
 
-	printf("%lld\n", high);
+	while(left<=right)
+	{
+		sum=0;
+		mid=(left+right)>>1;
+
+		for(int n=0;n<N;n++)
+			if(tree[n]>mid)
+				sum+=tree[n]-mid;
+
+		if(sum<M)
+			right=mid-1;
+		else
+		{
+			ans=mid;
+			left=mid+1;
+		}
+	}
+
+	printf("%d\n", ans);
 	free(tree);
 	return 0;
 }
