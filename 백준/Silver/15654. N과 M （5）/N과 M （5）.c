@@ -1,57 +1,52 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
 
-void N_M(int *A,int *B,int N,int M,int current)
+int arr[8], N, M, NM[8];
+
+void N_M(int x)
 {
-	if(current==M)
+	if(x==M)
 	{
-		for(int m=0;m<M;m++)
-			printf("%d ", A[m]);
+		for(int i=0;i<M;i++)
+			printf("%d ", NM[i]);
 		printf("\n");
+		return;
 	}
-	else
-		for(int n=0;n<N;n++)
-		{
-			bool same=false;
 
-			for(int i=0;i<current;i++)
-				if(A[i]==B[n])
-				{
-					same=true;
-					break;
-				}
-			if(!same)
+	for(int i=0;i<N;i++)
+	{
+		int count=0;
+
+		for(int j=0;j<x;j++)
+			if(NM[j]==arr[i])
 			{
-				A[current]=B[n];
-				N_M(A,B,N,M,current+1);
+				count++;
+				break;
 			}
+
+		if(count==0)
+		{
+			NM[x]=arr[i];
+			N_M(x+1);
 		}
+	}
 }
 
 int main(void)
 {
-	int N, M, *A=NULL, *B=NULL;
+	scanf("%d%d", &N, &M);
 
-	scanf("%d %d", &N, &M);
-	A=(int *)malloc(M*sizeof(int));
-	B=(int *)malloc(N*sizeof(int));
+	for(int i=0;i<N;i++)
+		scanf("%d", &arr[i]);
 
-	for(int n=0;n<N;n++)
-		scanf("%d", &B[n]);
-
-	for(int i=0;i<N-1;i++)
+	for(int i=0;i<N;i++)
 		for(int j=i+1;j<N;j++)
-			if(B[i]>B[j])
+			if(arr[i]>arr[j])
 			{
-				int temp=B[i];
-				B[i]=B[j];
-				B[j]=temp;
+				int temp=arr[i];
+				arr[i]=arr[j];
+				arr[j]=temp;
 			}
 
-	N_M(A,B,N,M,0);
-
-	free(A);
-	free(B);
+	N_M(0);
 	return 0;
 }
