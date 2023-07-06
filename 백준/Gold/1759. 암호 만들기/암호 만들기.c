@@ -1,36 +1,41 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-void password(char *alphabet,int C,int L,int current,int last,char *list,int consonant,int vowel)
+int vowel[2]={0, }, L, C, order[15];
+char alphabet[16]={'\0', };
+
+void find_password(int index,int start)
 {
-	if(current==L)
+	if(index==L)
 	{
-		if(consonant>1 && vowel>0)
+		if(vowel[0]>1 && vowel[1]>0)
 		{
-			for(int l=0;l<L;l++)
-				printf("%c", list[l]);
+			for(int i=0;i<index;i++)
+				printf("%c", alphabet[order[i]]);
 			printf("\n");
 		}
 		return;
 	}
-	for(int i=last+1;i<C;i++)
-	{
-		list[current]=alphabet[i];
-		if(alphabet[i]=='a' || alphabet[i]=='e' || alphabet[i]=='i' || alphabet[i]=='o' || alphabet[i]=='u')
-			password(alphabet,C,L,current+1,i,list,consonant,vowel+1);
-		else
-			password(alphabet,C,L,current+1,i,list,consonant+1,vowel);
-	}
+
+	int check[26]={0, };
+
+	for(int i=0;i<index;i++)
+		check[alphabet[order[i]]-'a']=1;
+
+	for(int c=start;c<C;c++)
+		if(check[alphabet[c]-'a']==0)
+		{
+			int is_vowel=alphabet[c]=='a'||alphabet[c]=='e'||alphabet[c]=='i'||alphabet[c]=='o'||alphabet[c]=='u';
+
+			vowel[is_vowel]++;
+			order[index]=c;
+			find_password(index+1,c+1);
+			vowel[is_vowel]--;
+		}
 }
 
 int main(void)
 {
-	int L, C;
-	char *alphabet=NULL,  *list=NULL;
-
 	scanf("%d%d", &L, &C);
-	alphabet=(char *)malloc(C*sizeof(char));
-	list=(char *)calloc(L,sizeof(char));
 
 	for(int c=0;c<C;c++)
 	{
@@ -47,7 +52,6 @@ int main(void)
 				alphabet[j]=temp;
 			}
 
-	password(alphabet,C,L,0,-1,list,0,0);
-	free(alphabet);
+	find_password(0,0);
 	return 0;
 }
