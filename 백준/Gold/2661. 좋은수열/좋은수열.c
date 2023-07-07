@@ -1,73 +1,46 @@
 #include<stdio.h>
-#include<stdbool.h>
 
-int N, number[80]={0, };
-bool found=false;
+int N, numbers[80], found=0;
 
-bool find_good(int index)
+void good_numbers(int index)
 {
-	for(int i=1;i<=index/2;i++)
-	{
-		bool same=true;
+	if(found)
+		return;
 
-		for(int j=0;j<i;j++)
-			if(number[index-j-1]!=number[index-i-j-1])
+	for(int i=1;(i<<1)<=index;i++)
+	{
+		int same=1;
+
+		for(int j=1;j<=i;j++)
+			if(numbers[index-j]!=numbers[index-i-j])
 			{
-				same=false;
+				same=0;
 				break;
 			}
 
 		if(same)
-			return false;
-	}
-
-	return true;
-}
-
-void good_number(int index)
-{
-	if(found)
-		return;
-	if(index==1)
-	{
-		number[0]++;
-		good_number(2);
-	}
-	else if(index==N+1)
-	{
-		if(find_good(index))
-		{
-			found=true;
-			for(int i=0;i<N;i++)
-				printf("%d", number[i]);
-			printf("\n");
 			return;
-		}
-		else
-			find_good(index-1);
+	}
+
+	if(index==N)
+	{
+		for(int i=0;i<index;i++)
+			printf("%d", numbers[i]);
+		printf("\n");
+		found=1;
+		return;
 	}
 	else
-	{
-		while(number[index-1]<3)
+		for(int i=1;i<=3;i++)
 		{
-			number[index-1]++;
-			if(find_good(index))
-			{
-				good_number(index+1);
-				break;
-			}
+			numbers[index]=i;
+			good_numbers(index+1);
 		}
-		if(!found)
-		{
-			number[index-1]=0;
-			good_number(index-1);
-		}
-	}
 }
 
 int main(void)
 {
 	scanf("%d", &N);
-	good_number(1);
+	good_numbers(0);
 	return 0;
 }
