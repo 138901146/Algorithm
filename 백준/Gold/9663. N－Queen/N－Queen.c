@@ -1,55 +1,80 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
 
-int abs(int N)
+int chess[15][15]={0, }, N;
+
+int nqueen(int bottom)
 {
-	return N<0?-N:N;
-}
-
-int queen(int *board,int current,int N)
-{
-	int count=0, *temp=calloc(N,sizeof(int));
-
-	if(current==N)
-	{
-		free(temp);
+	if(bottom==N)
 		return 1;
-	}
 
-	for(int i=0;i<current;i++)
-		temp[i]=board[i];
+	int count=0;
 
-	for(int n=0;n<N;n++)
+	for(int i=0;i<N;i++)
 	{
-		bool flag=true;
+		int check=0;
+		chess[bottom][i]=1;
 
-		for(int i=0;i<current;i++)
-			if(board[i]==n || current-i==abs(n-board[i]))
+		for(int j=0;j<bottom;j++)
+			if(chess[j][i])
 			{
-				flag=false;
+				check++;
 				break;
 			}
 
-		if(flag)
+		if(check)
 		{
-			temp[current]=n;
-			count+=queen(temp,current+1,N);
+			chess[bottom][i]=0;
+			continue;
 		}
+
+		int y=bottom-1, x=i-1;
+
+		while(y>=0 && x>=0)
+		{
+			if(chess[y][x])
+			{
+				check++;
+				break;
+			}
+			y--;
+			x--;
+		}
+
+		if(check)
+		{
+			chess[bottom][i]=0;
+			continue;
+		}
+
+		y=bottom-1;
+		x=i+1;
+
+		while(y>=0 && x<N)
+		{
+			if(chess[y][x])
+			{
+				check++;
+				break;
+			}
+			y--;
+			x++;
+		}
+
+		if(check)
+		{
+			chess[bottom][i]=0;
+			continue;
+		}
+
+		count+=nqueen(bottom+1);
+		chess[bottom][i]=0;
 	}
 
-	free(temp);
 	return count;
 }
 
 int main(void)
 {
-	int N, *board=NULL;
-
 	scanf("%d", &N);
-	board=(int *)calloc(N,sizeof(int));
-
-	printf("%d\n", queen(board,0,N));
-	free(board);
-	return 0;
+	printf("%d\n", nqueen(0));
 }
