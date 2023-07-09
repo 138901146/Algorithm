@@ -1,98 +1,114 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
-int max(int *A,int plus,int minus,int multiply,int divide,int index,int N,int current)
+int *A=NULL, N, operation[4];
+
+int find_max(int current,int value)
 {
-	int max_num=-2000000000;
+	int max=-1000000000, calculate;
 
-	if(index==N-1)
+	if(current==N-1)
 	{
-		if(plus>0)
-			return current+A[index];
-		else if(minus>0)
-			return current-A[index];
-		else if(multiply>0)
-			return current*A[index];
+		if(operation[0])
+			return value+A[current];
+		else if(operation[1])
+			return value-A[current];
+		else if(operation[2])
+			return value*A[current];
 		else
-			return current/A[index];
+			return value/A[current];
 	}
 
-	if(plus>0)
+	if(operation[0])
 	{
-		int cal=max(A,plus-1,minus,multiply,divide,index+1,N,current+A[index]);
-		max_num=cal>max_num?cal:max_num;
+		operation[0]--;
+		calculate=find_max(current+1,value+A[current]);
+		operation[0]++;
+		max=calculate>max?calculate:max;
 	}
-	if(minus>0)
+	if(operation[1])
 	{
-		int cal=max(A,plus,minus-1,multiply,divide,index+1,N,current-A[index]);
-		max_num=cal>max_num?cal:max_num;
+		operation[1]--;
+		calculate=find_max(current+1,value-A[current]);
+		operation[1]++;
+		max=calculate>max?calculate:max;
 	}
-	if(multiply>0)
+	if(operation[2])
 	{
-		int cal=max(A,plus,minus,multiply-1,divide,index+1,N,current*A[index]);
-		max_num=cal>max_num?cal:max_num;
+		operation[2]--;
+		calculate=find_max(current+1,value*A[current]);
+		operation[2]++;
+		max=calculate>max?calculate:max;
 	}
-	if(divide>0)
+	if(operation[3])
 	{
-		int cal=max(A,plus,minus,multiply,divide-1,index+1,N,current/A[index]);
-		max_num=cal>max_num?cal:max_num;
+		operation[3]--;
+		calculate=find_max(current+1,value/A[current]);
+		operation[3]++;
+		max=calculate>max?calculate:max;
 	}
 
-	return max_num;
+	return max;
 }
 
-int min(int *A,int plus,int minus,int multiply,int divide,int index,int N,int current)
+int find_min(int current,int value)
 {
-	int min_num=2000000000;
+	int min=1000000000, calculate;
 
-	if(index==N-1)
+	if(current==N-1)
 	{
-		if(plus>0)
-			return current+A[index];
-		else if(minus>0)
-			return current-A[index];
-		else if(multiply>0)
-			return current*A[index];
+		if(operation[0])
+			return value+A[current];
+		else if(operation[1])
+			return value-A[current];
+		else if(operation[2])
+			return value*A[current];
 		else
-			return current/A[index];
+			return value/A[current];
 	}
 
-	if(plus>0)
+	if(operation[0])
 	{
-		int cal=min(A,plus-1,minus,multiply,divide,index+1,N,current+A[index]);
-		min_num=cal<min_num?cal:min_num;
+		operation[0]--;
+		calculate=find_min(current+1,value+A[current]);
+		operation[0]++;
+		min=calculate<min?calculate:min;
 	}
-	if(minus>0)
+	if(operation[1])
 	{
-		int cal=min(A,plus,minus-1,multiply,divide,index+1,N,current-A[index]);
-		min_num=cal<min_num?cal:min_num;
+		operation[1]--;
+		calculate=find_min(current+1,value-A[current]);
+		operation[1]++;
+		min=calculate<min?calculate:min;
 	}
-	if(multiply>0)
+	if(operation[2])
 	{
-		int cal=min(A,plus,minus,multiply-1,divide,index+1,N,current*A[index]);
-		min_num=cal<min_num?cal:min_num;
+		operation[2]--;
+		calculate=find_min(current+1,value*A[current]);
+		operation[2]++;
+		min=calculate<min?calculate:min;
 	}
-	if(divide>0)
+	if(operation[3])
 	{
-		int cal=min(A,plus,minus,multiply,divide-1,index+1,N,current/A[index]);
-		min_num=cal<min_num?cal:min_num;
+		operation[3]--;
+		calculate=find_min(current+1,value/A[current]);
+		operation[3]++;
+		min=calculate<min?calculate:min;
 	}
 
-	return min_num;
+	return min;
 }
 
 int main(void)
 {
-	int N, *A=NULL, plus, minus, multiply, divide;
-
 	scanf("%d", &N);
 	A=(int *)malloc(N*sizeof(int));
+	for(int n=0;n<N;n++)
+		scanf("%d", &A[n]);
+	for(int i=0;i<4;i++)
+		scanf("%d", &operation[i]);
 
-	for(int i=0;i<N;i++)
-		scanf("%d", &A[i]);
-	scanf("%d%d%d%d", &plus, &minus, &multiply, &divide);
-
-	printf("%d\n%d\n", max(A,plus,minus,multiply,divide,1,N,A[0]), min(A,plus,minus,multiply,divide,1,N,A[0]));
+	printf("%d\n%d\n", find_max(1,A[0]), find_min(1,A[0]));
 	free(A);
 	return 0;
 }
