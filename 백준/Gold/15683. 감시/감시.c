@@ -1,198 +1,130 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-int N, M, CCTV_count=0, *CCTV=NULL, **office=NULL;
+int N, M, office[8][8], CCTV[8], CCTV_count=0, min=64, operation[32];
 
-int blind_spot(int current)
+void find_min(int index,int operation_count)
 {
-	if(current==CCTV_count)
+	if(index==CCTV_count)
 	{
-		int area=0, wall_count=0;
-
-		for(int i=0;i<CCTV_count;i++)
+		int count=0;
+		for(int i=0;i<operation_count;i++)
 		{
-			int x=CCTV[i]/10, y=CCTV[i]%10;
+			int x=operation[i]&7, y=(operation[i]>>3)&7, move=operation[i]>>6;
 
-			if((office[x][y]&(1<<3))!=0)
+			switch(move)
 			{
-				while(x>0 && office[x-1][y]!=6)
-				{
-					x--;
-					if(office[x][y]==0)
-						office[x][y]=-1;
-				}
-				x=CCTV[i]/10;
-				y=CCTV[i]%10;
-			}
-			if((office[x][y]&(1<<4))!=0)
-			{
-				while(x<N-1 && office[x+1][y]!=6)
-				{
-					x++;
-					if(office[x][y]==0)
-						office[x][y]=-1;
-				}
-				x=CCTV[i]/10;
-				y=CCTV[i]%10;
-			}
-			if((office[x][y]&(1<<5))!=0)
-			{
-				while(y>0 && office[x][y-1]!=6)
-				{
-					y--;
-					if(office[x][y]==0)
-						office[x][y]=-1;
-				}
-				x=CCTV[i]/10;
-				y=CCTV[i]%10;
-			}
-			if((office[x][y]&(1<<6))!=0)
-			{
-				while(y<M-1 && office[x][y+1]!=6)
-				{
-					y++;
-					if(office[x][y]==0)
-						office[x][y]=-1;
-				}
-				x=CCTV[i]/10;
-				y=CCTV[i]%10;
+				case 0:
+					while(y>=0)
+					{
+						if(office[y][x]==0)
+							office[y][x]=-1;
+						else if(office[y][x]==6)
+							break;
+						y--;
+					}
+					break;
+				case 1:
+					while(x>=0)
+					{
+						if(office[y][x]==0)
+							office[y][x]=-1;
+						else if(office[y][x]==6)
+							break;
+						x--;
+					}
+					break;
+				case 2:
+					while(y<N)
+					{
+						if(office[y][x]==0)
+							office[y][x]=-1;
+						else if(office[y][x]==6)
+							break;
+						y++;
+					}
+					break;
+				case 3:
+					while(x<M)
+					{
+						if(office[y][x]==0)
+							office[y][x]=-1;
+						else if(office[y][x]==6)
+							break;
+						x++;
+					}
+					break;
 			}
 		}
 
 		for(int n=0;n<N;n++)
 			for(int m=0;m<M;m++)
-				if(office[n][m]==-1)
+				if(office[n][m]==0)
+					count++;
+				else if(office[n][m]==-1)
 					office[n][m]=0;
-				else if(office[n][m]==0)
-					area++;
 
-		return area;
+		min=count<min?count:min;
+		return;
 	}
 
-	int x=CCTV[current]/10, y=CCTV[current]%10, min=64, temp;
+	int x=CCTV[index]&7, y=(CCTV[index]>>3)&7, type=CCTV[index]>>6;
 
-	switch(office[x][y])
+	switch(type)
 	{
 		case 1:
-			office[x][y]|=1<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=1<<3;
-			office[x][y]|=1<<4;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=1<<4;
-			office[x][y]|=1<<5;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=1<<5;
-			office[x][y]|=1<<6;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=1<<6;
+			for(int i=0;i<4;i++)
+			{
+				operation[operation_count]=i<<6|y<<3|x;
+				find_min(index+1,operation_count+1);
+			}
 			break;
 		case 2:
-			office[x][y]|=3<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=3<<3;
-			office[x][y]|=3<<5;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=3<<5;
+			for(int i=0;i<2;i++)
+			{
+				operation[operation_count]=i<<6|y<<3|x;
+				operation[operation_count+1]=(2|i)<<6|y<<3|x;
+				find_min(index+1,operation_count+2);
+			}
 			break;
 		case 3:
-			office[x][y]|=5<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=5<<3;
-			office[x][y]|=9<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=9<<3;
-			office[x][y]|=3<<4;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=3<<4;
-			office[x][y]|=5<<4;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=5<<4;
+			for(int i=0;i<4;i++)
+			{
+				operation[operation_count]=i<<6|y<<3|x;
+				operation[operation_count+1]=((i+1)&3)<<6|y<<3|x;
+				find_min(index+1,operation_count+2);
+			}
 			break;
 		case 4:
-			office[x][y]|=14<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=14<<3;
-			office[x][y]|=13<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=13<<3;
-			office[x][y]|=11<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=11<<3;
-			office[x][y]|=7<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=7<<3;
+			for(int i=0;i<4;i++)
+			{
+				for(int j=0;j<4;j++)
+					if(i!=j)
+						operation[operation_count++]=j<<6|y<<3|x;
+				find_min(index+1,operation_count);
+				operation_count-=3;
+			}
 			break;
 		case 5:
-			office[x][y]|=15<<3;
-			temp=blind_spot(current+1);
-			if(temp<min)
-				min=temp;
-			office[x][y]^=15<<3;
-			break;
-		default:
+			for(int i=0;i<4;i++)
+				operation[operation_count+i]=i<<6|y<<3|x;
+			find_min(index+1,operation_count+4);
 			break;
 	}
-
-	return min;
 }
 
 int main(void)
 {
 	scanf("%d%d", &N, &M);
-	office=(int **)malloc(N*sizeof(int *));
 	for(int n=0;n<N;n++)
-	{
-		office[n]=(int *)malloc(M*sizeof(int));
-
 		for(int m=0;m<M;m++)
 		{
 			scanf("%d", &office[n][m]);
 			if(office[n][m]>0 && office[n][m]<6)
-				CCTV_count++;
+				CCTV[CCTV_count++]=office[n][m]<<6|n<<3|m;
 		}
-	}
 
-	CCTV=(int *)malloc(CCTV_count*sizeof(int));
-	CCTV_count=0;
+	find_min(0,0);
 
-	for(int n=0;n<N;n++)
-		for(int m=0;m<M;m++)
-			if(office[n][m]>0 && office[n][m]<6)
-				CCTV[CCTV_count++]=10*n+m;
-
-	printf("%d\n", blind_spot(0));
-	free(CCTV);
-	for(int n=0;n<N;n++)
-		free(office[n]);
-	free(office);
+	printf("%d\n", min);
 	return 0;
 }
