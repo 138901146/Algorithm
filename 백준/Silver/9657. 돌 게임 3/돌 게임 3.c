@@ -1,16 +1,29 @@
 #include<stdio.h>
 #include<stdbool.h>
 
+int game[1001];
+
+bool stone(int N)
+{
+	if(N<0)
+		return true;
+	else if(N==0)
+		return false;
+	else if(game[N]!=-1)
+		return game[N];
+	game[N]=!(stone(N-1)&&stone(N-3)&&stone(N-4));
+
+	return game[N];
+}
+
 int main(void)
 {
-	bool stone[1001]={false,true,false,true,true,true,true,false, };
 	int N;
 
 	scanf("%d", &N);
+	for(int n=0;n<=N;n++)
+		game[n]=-1;
 
-	for(int n=6;n<=N;n++)
-		stone[n]=!(stone[n-1]&&stone[n-3]&&stone[n-4]);
-
-	printf("%s\n", stone[N]?"SK":"CY");
+	printf("%s\n", stone(N)?"SK":"CY");
 	return 0;
 }
