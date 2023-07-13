@@ -1,33 +1,26 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
 int main(void)
 {
-	int N, *T=NULL, *P=NULL, *counsel=NULL, max=0;
+	int N, *T=NULL, *P=NULL, *max=NULL;
 
 	scanf("%d", &N);
 	T=(int *)malloc(N*sizeof(int));
 	P=(int *)malloc(N*sizeof(int));
-	counsel=(int *)calloc(N+1,sizeof(int));
+	max=(int *)calloc(N+1,sizeof(int));
 
 	for(int i=0;i<N;i++)
+	{
 		scanf("%d%d", &T[i], &P[i]);
+		if(T[i]+i<=N)
+			max[T[i]+i]=max[i]+P[i]>max[T[i]+i]?max[i]+P[i]:max[T[i]+i];
+		max[i+1]=max[i]>max[i+1]?max[i]:max[i+1];
+	}
 
-	for(int i=N-1;i>=0;i--)
-		if(i+T[i]<=N)
-		{
-			counsel[i]=counsel[i+1]<P[i]+counsel[i+T[i]]?P[i]+counsel[i+T[i]]:P[i];
-			if(counsel[i]>max)
-				max=counsel[i];
-			else
-				counsel[i]=max;
-		}
-		else
-			counsel[i]=counsel[i+1];
-
-	printf("%d\n", max);
-	free(counsel);
-	free(P);
+	printf("%d\n", max[N]);
+	free(max);
 	free(T);
+	free(P);
 	return 0;
 }
