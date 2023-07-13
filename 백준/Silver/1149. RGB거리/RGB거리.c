@@ -1,29 +1,28 @@
 #include<stdio.h>
-#include<stdlib.h>
 
 int main(void)
 {
-	int N, **cost=NULL;
+	int N, color[1000][3], min[1000][3], cheap=1000000000;
 
 	scanf("%d", &N);
-	cost=(int **)malloc(N*sizeof(int *));
-	for(int n=0;n<N;n++)
-		cost[n]=(int *)malloc(3*sizeof(int));
 
-	for(int n=0;n<N;n++)
-		for(int i=0;i<3;i++)
-			scanf("%d", &cost[n][i]);
-
-	for(int n=1;n<N;n++)
+	for(int i=0;i<3;i++)
 	{
-		cost[n][0]=cost[n-1][1]<cost[n-1][2]?cost[n-1][1]+cost[n][0]:cost[n-1][2]+cost[n][0];
-		cost[n][1]=cost[n-1][0]<cost[n-1][2]?cost[n-1][0]+cost[n][1]:cost[n-1][2]+cost[n][1];
-		cost[n][2]=cost[n-1][0]<cost[n-1][1]?cost[n-1][0]+cost[n][2]:cost[n-1][1]+cost[n][2];
+		scanf("%d", &color[0][i]);
+		min[0][i]=color[0][i];
 	}
+	for(int n=1;n<N;n++)
+		for(int i=0;i<3;i++)
+		{
+			scanf("%d", &color[n][i]);
+			min[n][i]=1000000000;
+			for(int j=1;j<3;j++)
+				min[n][i]=min[n-1][(i+j)%3]+color[n][i]<min[n][i]?min[n-1][(i+j)%3]+color[n][i]:min[n][i];
+		}
 
-	printf("%d\n", cost[N-1][0]<=cost[N-1][1]&&cost[N-1][0]<=cost[N-1][2]?cost[N-1][0]:cost[N-1][1]<=cost[N-1][0]&&cost[N-1][1]<=cost[N-1][2]?cost[N-1][1]:cost[N-1][2]);
-	for(int n=0;n<N;n++)
-		free(cost[n]);
-	free(cost);
+	for(int i=0;i<3;i++)
+		cheap=min[N-1][i]<cheap?min[N-1][i]:cheap;
+
+	printf("%d\n", cheap);
 	return 0;
 }
