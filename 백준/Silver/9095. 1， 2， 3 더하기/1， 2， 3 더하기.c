@@ -1,22 +1,28 @@
 #include<stdio.h>
 
-int sumFunction(int N)
+int sum[11]={0, };
+
+int find_n(int n)
 {
-	return N<3?N:N==3?4:sumFunction(N-1)+sumFunction(N-2)+sumFunction(N-3);
+	if(n<3)
+		return n;
+	else if(n==3)
+		return sum[3]=4;
+	else if(sum[n])
+		return sum[n];
+	else
+		return sum[n]=find_n(n-1)+find_n(n-2)+find_n(n-3);
 }
 
 int main(void)
 {
-	int T;
+	int T, n;
 
 	scanf("%d", &T);
-
-	for(int i=0;i<T;i++)
+	for(int t=0;t<T;t++)
 	{
-		int n;
-
 		scanf("%d", &n);
-		printf("%d\n", sumFunction(n));
+		printf("%d\n", find_n(n));
 	}
 
 	return 0;
