@@ -28,11 +28,10 @@ int main(void)
 
 	for(int t=0;t<5;t++)
 	{
-		for(int i=0;i<501;i++)
-			for(int j=0;j<501;j++)
-				marble[i][j][0]=marble[i][j][1]=-1;
-
 		scanf("%d%d", &k1, &k2);
+		for(int i=0;i<=k1;i++)
+			for(int j=0;j<=k2;j++)
+				marble[i][j][0]=marble[i][j][1]=-1;
 		printf("%c\n", marble_game(k1,k2,1)?'A':'B');
 	}
 
