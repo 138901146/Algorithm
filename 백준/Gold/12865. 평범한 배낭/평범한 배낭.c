@@ -1,54 +1,39 @@
 #include<stdio.h>
-#include<stdbool.h>
-#include<stdlib.h>
+#include<malloc.h>
+
+typedef struct
+{
+	int weight, value;
+}
+bag;
 
 int main(void)
 {
-	int N, K, *W=NULL, *V=NULL, *put=NULL, max=0;
-	bool **used=NULL;
+	int N, K, **knapsack=NULL, max=0;
+	bag *js=NULL;
 
 	scanf("%d%d", &N, &K);
-	W=(int *)malloc(N*sizeof(int));
-	V=(int *)malloc(N*sizeof(int));
-	put=(int *)calloc(K+1,sizeof(int));
-	used=(bool **)malloc((K+1)*sizeof(bool *));
-	for(int k=0;k<=K;k++)
-		used[k]=(bool *)calloc(N,sizeof(bool));
+	js=(bag *)malloc((N+1)*sizeof(bag));
+	knapsack=(int **)malloc((N+1)*sizeof(int *));
 
-	for(int n=0;n<N;n++)
-		scanf("%d%d", &W[n], &V[n]);
-
-	for(int i=0;i<N;i++)
-		for(int j=i+1;j<N;j++)
-			if(W[i]>W[j] || W[i]==W[j]&&V[i]<V[j])
-			{
-				int temp=W[i];
-				W[i]=W[j];
-				W[j]=temp;
-				temp=V[i];
-				V[i]=V[j];
-				V[j]=temp;
-			}
-
-	for(int i=W[0];i<=K;i++)
+	knapsack[0]=(int *)calloc(K+1,sizeof(int));
+	for(int n=1;n<=N;n++)
 	{
-		for(int j=0;j<N&&i-W[j]>=0;j++)
-			if(put[i-W[j]]+V[j]>put[i] && !used[i-W[j]][j])
-			{
-				for(int k=0;k<N;k++)
-					used[i][k]=used[i-W[j]][k];
-				used[i][j]=true;
-				put[i]=put[i-W[j]]+V[j];
-			}
-		max=put[i]>max?put[i]:max;
+		scanf("%d%d", &js[n].weight, &js[n].value);
+		knapsack[n]=(int *)calloc(K+1,sizeof(int));
 	}
 
-	printf("%d\n", max);
-	free(put);
-	for(int k=0;k<=K;k++)
-		free(used[k]);
-	free(used);
-	free(V);
-	free(W);
+	for(int n=1;n<=N;n++)
+		for(int k=0;k<=K;k++)
+			if(js[n].weight<=k)
+				knapsack[n][k]=knapsack[n-1][k]>knapsack[n-1][k-js[n].weight]+js[n].value?knapsack[n-1][k]:knapsack[n-1][k-js[n].weight]+js[n].value;
+			else
+				knapsack[n][k]=knapsack[n-1][k];
+
+	printf("%d\n", knapsack[N][K]);
+	for(int n=0;n<=N;n++)
+		free(knapsack[n]);
+	free(knapsack);
+	free(js);
 	return 0;
 }
