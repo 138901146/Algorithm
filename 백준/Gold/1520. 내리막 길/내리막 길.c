@@ -1,26 +1,20 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-int N, M, **map=NULL, **method=NULL;
+int M, N, board[501][501], method[501][501], move[4][2]={{-1,0},{0,-1},{0,1},{1,0}};
 
-int route(int y,int x)
+int find_method(int y,int x)
 {
-	if(y==M-1 && x==N-1)
-		return 1;
-	else if(method[y][x]!=-1)
+	if(method[y][x]!=-1)
 		return method[y][x];
-	else
-		method[y][x]=0;
 
-	if(x>0 && map[y][x-1]<map[y][x])
-		method[y][x]+=route(y,x-1);
-	if(x<N-1 && map[y][x+1]<map[y][x])
-		method[y][x]+=route(y,x+1);
-	if(y>0 && map[y-1][x]<map[y][x])
-		method[y][x]+=route(y-1,x);
-	if(y<M-1 && map[y+1][x]<map[y][x])
-		method[y][x]+=route(y+1,x);
+	method[y][x]=0;
+	for(int i=0;i<4;i++)
+	{
+		int dy=y+move[i][0], dx=x+move[i][1];
 
+		if(dy>=0 && dy<M && dx>=0 && dx<N && board[dy][dx]>board[y][x])
+			method[y][x]+=find_method(dy,dx);
+	}
 
 	return method[y][x];
 }
@@ -28,27 +22,15 @@ int route(int y,int x)
 int main(void)
 {
 	scanf("%d%d", &M, &N);
-	map=(int **)malloc(M*sizeof(int *));
-	method=(int **)malloc(M*sizeof(int *));
-	for(int m=0;m<M;m++)
-	{
-		map[m]=(int *)malloc(N*sizeof(int));
-		method[m]=(int *)malloc(N*sizeof(int));
 
+	for(int m=0;m<M;m++)
 		for(int n=0;n<N;n++)
 		{
-			scanf("%d", &map[m][n]);
+			scanf("%d", &board[m][n]);
 			method[m][n]=-1;
 		}
-	}
 
-	printf("%d\n", route(0,0));
-	for(int m=0;m<M;m++)
-	{
-		free(method[m]);
-		free(map[m]);
-	}
-	free(method);
-	free(map);
+	method[0][0]=1;
+	printf("%d\n", find_method(M-1,N-1));
 	return 0;
 }
