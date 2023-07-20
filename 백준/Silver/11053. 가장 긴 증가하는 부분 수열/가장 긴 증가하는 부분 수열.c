@@ -1,25 +1,20 @@
 #include<stdio.h>
-#include<stdlib.h>
 
 int main(void)
 {
-	int N, *A=NULL, num, max=1;
+	int N, A[1001], max[1001]={0, }, best=0;
 
 	scanf("%d", &N);
-	A=(int *)malloc(N*sizeof(int));
-
-	for(int n=0;n<N;n++)
+	for(int i=0;i<N;i++)
 	{
-		scanf("%d", &num);
-		A[n]=10000+num;
-
-		for(int i=0;i<n;i++)
-			A[n]=A[i]%10000<num&&A[i]/10000>=A[n]/10000?10000*((A[i]/10000)+1)+num:A[n];
-
-		max=A[n]/10000>max?A[n]/10000:max;
+		max[i]=1;
+		scanf("%d", &A[i]);
+		for(int j=0;j<i;j++)
+			if(A[j]<A[i] && max[i]<max[j]+1)
+				max[i]=max[j]+1;
+		best=max[i]>best?max[i]:best;
 	}
 
-	printf("%d\n", max);
-	free(A);
+	printf("%d\n", best);
 	return 0;
 }
