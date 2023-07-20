@@ -1,17 +1,15 @@
 #include<stdio.h>
-#include<malloc.h>
 
 int main(void)
 {
-	int N, *min=NULL;
+	int N, min[100001]={0, };
 
 	scanf("%d", &N);
-	min=(int *)calloc(N+1,sizeof(int));
 
 	for(int i=0;i*i<=N;i++)
 		min[i*i]=1;
 
-	for(int i=1;i<=N;i++)
+	for(int i=2;i<=N;i++)
 	{
 		if(!min[i])
 			min[i]=i;
@@ -20,6 +18,5 @@ int main(void)
 	}
 
 	printf("%d\n", min[N]);
-	free(min);
 	return 0;
 }
