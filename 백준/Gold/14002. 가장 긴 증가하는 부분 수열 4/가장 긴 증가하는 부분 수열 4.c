@@ -1,50 +1,36 @@
 #include<stdio.h>
-#include<stdlib.h>
 
 int main(void)
 {
-	int N, *A=NULL, *count=NULL, max=0, max_index, *prev=NULL, *stack=NULL, index;
+	int N, A[1001], max[1001]={0, }, best, length=0, previous[1001], backtrack[1001];
 
 	scanf("%d", &N);
-	A=(int *)malloc(N*sizeof(int));
-	count=(int *)malloc(N*sizeof(int));
-	prev=(int *)malloc(N*sizeof(int));
-
-	for(int n=0;n<N;n++)
+	for(int i=0;i<N;i++)
 	{
-		prev[n]=n;
-		count[n]=1;
-		scanf("%d", &A[n]);
-
-		for(int i=0;i<n;i++)
-			if(A[i]<A[n] && count[n]<=count[i])
+		max[i]=1;
+		scanf("%d", &A[i]);
+		for(int j=0;j<i;j++)
+			if(A[j]<A[i] && max[i]<max[j]+1)
 			{
-				count[n]=count[i]+1;
-				prev[n]=i;
+				max[i]=max[j]+1;
+				previous[i]=j;
 			}
 
-		if(count[n]>max)
+		if(max[i]>length)
 		{
-			max=count[n];
-			max_index=n;
+			length=max[i];
+			best=i;
 		}
 	}
 
-	stack=(int *)malloc(max*sizeof(int));
-	index=max;
-	while(index>0)
+	printf("%d\n", length);
+	for(int i=0;i<length;i++)
 	{
-		stack[--index]=A[max_index];
-		max_index=prev[max_index];
+		backtrack[i]=A[best];
+		best=previous[best];
 	}
-
-	printf("%d\n", max);
-	for(int i=0;i<max;i++)
-		printf("%d ", stack[i]);
+	for(int i=length-1;i>=0;i--)
+		printf("%d ", backtrack[i]);
 	printf("\n");
-	free(stack);
-	free(prev);
-	free(count);
-	free(A);
 	return 0;
 }
