@@ -1,22 +1,13 @@
 #include<stdio.h>
 
-int rectangle[1001]={0, };
-
-int find_2n(int n)
-{
-	if(n<3)
-		return n;
-	if(rectangle[n])
-		return rectangle[n];
-	return rectangle[n]=(find_2n(n-1)+find_2n(n-2))%10007;
-}
-
 int main(void)
 {
-	int n;
+	int n, rectangle[1001]={1,1,0, };
 
 	scanf("%d", &n);
+	for(int i=2;i<=n;i++)
+		rectangle[i]=(rectangle[i-1]+rectangle[i-2])%10007;
 
-	printf("%d\n", find_2n(n));
+	printf("%d\n", rectangle[n]);
 	return 0;
 }
