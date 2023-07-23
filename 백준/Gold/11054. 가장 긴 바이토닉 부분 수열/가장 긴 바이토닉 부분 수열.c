@@ -1,38 +1,37 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
 int main(void)
 {
-	int N, *A=NULL, *S=NULL, *E=NULL, max=0;
+	int N, *A=NULL, *ascending=NULL, *descending=NULL, max=0;
 
 	scanf("%d", &N);
 	A=(int *)malloc(N*sizeof(int));
-	S=(int *)calloc(N,sizeof(int));
-	E=(int *)calloc(N,sizeof(int));
+	ascending=(int *)malloc(N*sizeof(int));
+	descending=(int *)malloc(N*sizeof(int));
 
-	for(int n=0;n<N;n++)
-		scanf("%d", &A[n]);
-
-	for(int n=0;n<N;n++)
+	for(int i=0;i<N;i++)
 	{
-		S[n]=1;
-		for(int i=0;i<n;i++)
-			if(A[i]<A[n] && S[i]>=S[n])
-				S[n]=S[i]+1;
+		scanf("%d", &A[i]);
+
+		ascending[i]=1;
+		for(int j=0;j<i;j++)
+			if(A[j]<A[i] && ascending[i]<ascending[j]+1)
+				ascending[i]=ascending[j]+1;
 	}
-	for(int n=N-1;n>=0;n--)
+	for(int i=N-1;i>=0;i--)
 	{
-		E[n]=1;
-		for(int i=N-1;i>n;i--)
-			if(A[i]<A[n] && E[i]>=E[n])
-				E[n]=E[i]+1;
+		descending[i]=1;
+		for(int j=N-1;j>i;j--)
+			if(A[j]<A[i] && descending[i]<descending[j]+1)
+				descending[i]=descending[i]+1;
 
-		max=S[n]+E[n]-1>max?S[n]+E[n]-1:max;
+		max=ascending[i]+descending[i]>max?ascending[i]+descending[i]:max;
 	}
 
-	printf("%d\n", max);
+	printf("%d\n", max-1);
 	free(A);
-	free(S);
-	free(E);
+	free(ascending);
+	free(descending);
 	return 0;
 }
