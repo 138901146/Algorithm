@@ -1,40 +1,30 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 #include<string.h>
-
-int max2(int x,int y)
-{
-   return x>y?x:y;
-}
-
-int max3(int x,int y,int z)
-{
-   return x>=y&&x>=z?x:y>=x&&y>=z?y:z;
-}
 
 int main(void)
 {
-   char A[1001]={'\0', }, B[1001]={'\0', };
-   int **LCS=NULL, a, b;
+	char str[2][1001]={'\0', };
+	int **LCS=NULL, length[2];
 
-   scanf("%s%s", A, B);
-   a=strlen(A);
-   b=strlen(B);
+	scanf("%s%s", str[0], str[1]);
+	for(int i=0;i<2;i++)
+		length[i]=strlen(str[i]);
 
-   LCS=(int **)malloc((a+1)*sizeof(int *));
-   for(int i=0;i<=a;i++)
-      LCS[i]=(int *)calloc(b+1,sizeof(int));
+	LCS=(int **)malloc((length[0]+1)*sizeof(int *));
+	for(int i=0;i<=length[0];i++)
+		LCS[i]=(int *)calloc(length[1]+1,sizeof(int));
 
-   for(int i=1;i<=a;i++)
-      for(int j=1;j<=b;j++)
-         if(A[i-1]!=B[j-1])
-            LCS[i][j]=max2(LCS[i-1][j],LCS[i][j-1]);
-         else
-            LCS[i][j]=max3(LCS[i-1][j],LCS[i][j-1],LCS[i-1][j-1]+1);
+	for(int i=1;i<=length[0];i++)
+		for(int j=1;j<=length[1];j++)
+			if(str[0][i-1]!=str[1][j-1])
+				LCS[i][j]=LCS[i-1][j]>LCS[i][j-1]?LCS[i-1][j]:LCS[i][j-1];
+			else
+				LCS[i][j]=LCS[i-1][j-1]+1>=LCS[i-1][j]&&LCS[i-1][j-1]+1>=LCS[i][j-1]?LCS[i-1][j-1]+1:LCS[i-1][j]>=LCS[i-1][j-1]+1&&LCS[i-1][j]>=LCS[i][j-1]?LCS[i-1][j]:LCS[i][j-1];
 
-   printf("%d\n", LCS[a][b]);
-   for(int i=0;i<=a;i++)
-      free(LCS[i]);
-   free(LCS);
-   return 0;
+	printf("%d\n", LCS[length[0]][length[1]]);
+	for(int i=0;i<=length[0];i++)
+		free(LCS[i]);
+	free(LCS);
+	return 0;
 }
