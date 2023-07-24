@@ -1,44 +1,37 @@
 #include<stdio.h>
-#include<malloc.h>
 #include<stdbool.h>
 
-int **is_palindrome=NULL, *numbers=NULL;
+int arr[2000], palindrome[2000][2000];
 
-bool check_palindrome(int start,int end)
+bool is_palindrome(int S,int E)
 {
-	if(end-start<1)
-		return is_palindrome[start][end]=1;
-	else if(is_palindrome[start][end]!=-1)
-		return is_palindrome[start][end];
-	return is_palindrome[start][end]=(numbers[start]==numbers[end]&&check_palindrome(start+1,end-1));
+	if(E<=S)
+		return palindrome[S][E]=1;
+	else if(palindrome[S][E]!=-1)
+		return palindrome[S][E];
+	return palindrome[S][E]=(arr[S]==arr[E]&&is_palindrome(S+1,E-1));
 }
 
 int main(void)
 {
-	int N, S, E, M;
+	int N, M, S, E;
 
 	scanf("%d", &N);
-	numbers=(int *)malloc(N*sizeof(int));
-	is_palindrome=(int **)malloc(N*sizeof(int *));
-
-	for(int n=0;n<N;n++)
+	for(int i=0;i<N;i++)
 	{
-		scanf("%d", &numbers[n]);
-		is_palindrome[n]=(int *)malloc(N*sizeof(int));
-		for(int i=0;i<N;i++)
-			is_palindrome[n][i]=-1;
+		scanf("%d", &arr[i]);
+
+		for(int j=0;j<N;j++)
+			palindrome[i][j]=-1;
+		palindrome[i][i]=1;
 	}
 
 	scanf("%d", &M);
 	for(int m=0;m<M;m++)
 	{
 		scanf("%d%d", &S, &E);
-		printf("%d\n", check_palindrome(S-1,E-1));
+		printf("%d\n", is_palindrome(S-1,E-1));
 	}
 
-	for(int n=0;n<N;n++)
-		free(is_palindrome[n]);
-	free(is_palindrome);
-	free(numbers);
 	return 0;
 }
