@@ -1,70 +1,56 @@
 #include<stdio.h>
 
-char tree_info[26][3]={'\0', };
+char child[26][2]={'\0', };
 
 void preorder(int current)
 {
 	printf("%c", current+'A');
-
-	if(tree_info[current][1]!='\0')
-		preorder(tree_info[current][1]-'A');
-	if(tree_info[current][2]!='\0')
-		preorder(tree_info[current][2]-'A');
+	for(int i=0;i<2;i++)
+		if(child[current][i]!='.')
+			preorder(child[current][i]-'A');
 }
 
 void inorder(int current)
 {
-	if(tree_info[current][1]!='\0')
-		inorder(tree_info[current][1]-'A');
+	if(child[current][0]!='.')
+		inorder(child[current][0]-'A');
 	printf("%c", current+'A');
-	if(tree_info[current][2]!='\0')
-		inorder(tree_info[current][2]-'A');
+	if(child[current][1]!='.')
+		inorder(child[current][1]-'A');
+
 }
 
 void postorder(int current)
 {
-	if(tree_info[current][1]!='\0')
-		postorder(tree_info[current][1]-'A');
-	if(tree_info[current][2]!='\0')
-		postorder(tree_info[current][2]-'A');
+	for(int i=0;i<2;i++)
+		if(child[current][i]!='.')
+			postorder(child[current][i]-'A');
 	printf("%c", current+'A');
 }
 
 int main(void)
 {
 	int N;
-	char parent, child[2];
+	char p;
 
 	scanf("%d", &N);
 
-	getchar();
 	for(int n=0;n<N;n++)
 	{
-		scanf("%c", &parent);
 		getchar();
-		for(int i=0;i<2;i++)
-		{
-			scanf("%c", &child[i]);
-			getchar();
+		scanf("%c", &p);
+		p-='A';
 
-			if(child[i]!='.')
-			{
-				tree_info[parent-'A'][i+1]=child[i];
-				tree_info[child[i]-'A'][0]=parent;
-			}
-		}
+		for(int i=0;i<2;i++)
+			scanf(" %c", &child[p][i]);
 	}
 
-	for(int i=0;i<N;i++)
-		if(tree_info[i][0]=='\0')
-		{
-			preorder(i);
-			printf("\n");
-			inorder(i);
-			printf("\n");
-			postorder(i);
-			printf("\n");
-		}
+	preorder(0);
+	printf("\n");
+	inorder(0);
+	printf("\n");
+	postorder(0);
+	printf("\n");
 
 	return 0;
 }
