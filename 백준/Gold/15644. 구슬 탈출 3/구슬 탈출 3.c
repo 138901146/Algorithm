@@ -1,0 +1,376 @@
+#include<stdio.h>
+#include<stdbool.h>
+
+int main(void)
+{
+	int N, M, red_r, red_c, red[2], blue_r, blue_c, blue[2], state_r, state_c, moved=0, front=0, rear=0, queue[65536], last[65536], count=0, answer, initial;
+	char map[10][11]={'\0', }, operation[65537]={'\0', }, order[10000]={'\0', };
+	bool visited[65536]={false, }, found=false;
+
+	scanf("%d%d", &N, &M);
+	for(int n=0;n<N;n++)
+	{
+		getchar();
+		scanf("%s", map[n]);
+
+		for(int m=1;m<M;m++)
+			if(map[n][m]=='R')
+			{
+				red_r=n;
+				red_c=m;
+				map[n][m]='.';
+			}
+			else if(map[n][m]=='B')
+			{
+				blue_r=n;
+				blue_c=m;
+				map[n][m]='.';
+			}
+	}
+
+	initial=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+	queue[rear++]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+
+	while(front<rear && !found && moved<10)
+	{
+		int previous_rear=rear;
+
+		while(front<previous_rear && !found)
+		{
+			blue_c=queue[front]&15;
+			queue[front]>>=4;
+			blue_r=queue[front]&15;
+			queue[front]>>=4;
+			red_c=queue[front]&15;
+			red_r=queue[front]>>4;
+
+			state_r=red_r<blue_r;
+			state_c=red_c<blue_c;
+
+			if(state_r)
+			{
+				red[0]=red_r;
+				red[1]=red_c;
+				blue[0]=blue_r;
+				blue[1]=blue_c;
+
+				while(map[red[0]][red[1]]=='.')
+					red[0]--;
+				if(map[red[0]][red[1]]=='O')
+					found=true;
+				else
+					map[++red[0]][red[1]]='R';
+
+				while(map[blue[0]][blue[1]]=='.')
+					blue[0]--;
+				if(map[blue[0]][blue[1]]=='O')
+				{
+					if(!found)
+						map[red[0]][red[1]]='.';
+					found=false;
+				}
+				else
+				{
+					map[red[0]][red[1]]='.';
+					blue[0]++;
+					if(!visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]])
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='U';
+						queue[rear++]=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					}
+				}
+				visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=true;
+
+				if(found)
+				{
+					last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+					operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='U';
+					answer=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					break;
+				}
+
+				red[0]=red_r;
+				red[1]=red_c;
+				blue[0]=blue_r;
+				blue[1]=blue_c;
+
+				while(map[blue[0]][blue[1]]=='.')
+					blue[0]++;
+				if(map[blue[0]][blue[1]]!='O')
+				{
+					map[--blue[0]][blue[1]]='B';
+
+					while(map[red[0]][red[1]]=='.')
+						red[0]++;
+					if(map[red[0]][red[1]]=='O')
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='D';
+						answer=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+						found=true;
+						break;
+					}
+					red[0]--;
+					map[blue[0]][blue[1]]='.';
+
+					if(!visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]])
+					{
+						visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=true;
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='D';
+						queue[rear++]=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					}
+				}
+			}
+			else
+			{
+				red[0]=red_r;
+				red[1]=red_c;
+				blue[0]=blue_r;
+				blue[1]=blue_c;
+
+				while(map[blue[0]][blue[1]]=='.')
+					blue[0]--;
+				if(map[blue[0]][blue[1]]!='O')
+				{
+					map[++blue[0]][blue[1]]='B';
+
+					while(map[red[0]][red[1]]=='.')
+						red[0]--;
+					if(map[red[0]][red[1]]=='O')
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='U';
+						answer=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+						found=true;
+						break;
+					}
+					red[0]++;
+
+					if(!visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]])
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='U';
+						visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=true;
+						queue[rear++]=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					}
+					map[blue[0]][blue[1]]='.';
+				}
+
+				red[0]=red_r;
+				red[1]=red_c;
+				blue[0]=blue_r;
+				blue[1]=blue_c;
+
+				while(map[red[0]][red[1]]=='.')
+					red[0]++;
+				if(map[red[0]][red[1]]=='O')
+					found=true;
+				else
+					map[--red[0]][red[1]]='R';
+				while(map[blue[0]][blue[1]]=='.')
+					blue[0]++;
+				if(map[blue[0]][blue[1]]=='O')
+				{
+					if(!found)
+						map[red[0]][red[1]]='.';
+					found=false;
+				}
+				else
+				{
+					blue[0]--;
+
+					if(!visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]])
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='D';
+						queue[rear++]=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+						visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=true;
+					}
+					if(!found)
+						map[red[0]][red[1]]='.';
+				}
+
+				if(found)
+				{
+					last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+					operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='D';
+					answer=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					break;
+				}
+			}
+			if(state_c)
+			{
+				red[0]=red_r;
+				red[1]=red_c;
+				blue[0]=blue_r;
+				blue[1]=blue_c;
+
+				while(map[red[0]][red[1]]=='.')
+					red[1]--;
+				if(map[red[0]][red[1]]=='O')
+					found=true;
+				else
+					map[red[0]][++red[1]]='R';
+
+				while(map[blue[0]][blue[1]]=='.')
+					blue[1]--;
+				if(map[blue[0]][blue[1]]=='O')
+				{
+					if(!found)
+						map[red[0]][red[1]]='.';
+					found=false;
+				}
+				else
+				{
+					map[red[0]][red[1]]='.';
+					blue[1]++;
+					if(!visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]])
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='L';
+						queue[rear++]=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					}
+					
+				}
+				visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=true;
+
+				if(found)
+				{
+					last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+					operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='L';
+					answer=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					break;
+				}
+
+				red[0]=red_r;
+				red[1]=red_c;
+				blue[0]=blue_r;
+				blue[1]=blue_c;
+
+				while(map[blue[0]][blue[1]]=='.')
+					blue[1]++;
+				if(map[blue[0]][blue[1]]!='O')
+				{
+					map[blue[0]][--blue[1]]='B';
+
+					while(map[red[0]][red[1]]=='.')
+						red[1]++;
+					if(map[red[0]][red[1]]=='O')
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='R';
+						answer=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+						found=true;
+						break;
+					}
+					red[1]--;
+					map[blue[0]][blue[1]]='.';
+
+					if(!visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]])
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='R';
+						visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=true;
+						queue[rear++]=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					}
+				}
+			}
+			else
+			{
+				red[0]=red_r;
+				red[1]=red_c;
+				blue[0]=blue_r;
+				blue[1]=blue_c;
+
+				while(map[blue[0]][blue[1]]=='.')
+					blue[1]--;
+				if(map[blue[0]][blue[1]]!='O')
+				{
+					map[blue[0]][++blue[1]]='B';
+
+					while(map[red[0]][red[1]]=='.')
+						red[1]--;
+					if(map[red[0]][red[1]]=='O')
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='L';
+						answer=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+						found=true;
+						break;
+					}
+					red[1]++;
+
+					if(!visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]])
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='L';
+						visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=true;
+						queue[rear++]=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					}
+					map[blue[0]][blue[1]]='.';
+				}
+
+				red[0]=red_r;
+				red[1]=red_c;
+				blue[0]=blue_r;
+				blue[1]=blue_c;
+
+				while(map[red[0]][red[1]]=='.')
+					red[1]++;
+				if(map[red[0]][red[1]]=='O')
+					found=true;
+				else
+					map[red[0]][--red[1]]='R';
+				while(map[blue[0]][blue[1]]=='.')
+					blue[1]++;
+				if(map[blue[0]][blue[1]]=='O')
+				{
+					if(!found)
+						map[red[0]][red[1]]='.';
+					found=false;
+				}
+				else
+				{
+					blue[1]--;
+
+					if(!visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]])
+					{
+						last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+						operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='R';
+						queue[rear++]=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+						visited[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=true;
+					}
+					if(!found)
+						map[red[0]][red[1]]='.';
+				}
+				if(found)
+				{
+					last[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]=red_r<<12|red_c<<8|blue_r<<4|blue_c;
+					operation[red[0]<<12|red[1]<<8|blue[0]<<4|blue[1]]='R';
+					answer=red[0]<<12|red[1]<<8|blue[0]<<4|blue[1];
+					break;
+				}
+			}
+
+			front++;
+		}
+
+		moved++;
+	}
+
+	printf("%d\n", found?moved:-1);
+	if(found)
+	{
+		while(answer!=initial)
+		{
+			order[count++]=operation[answer];
+			answer=last[answer];
+		}
+
+		for(int i=count-1;i>=0;i--)
+			printf("%c", order[i]);
+	}
+	return 0;
+}
