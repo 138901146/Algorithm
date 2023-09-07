@@ -26,17 +26,17 @@ unsigned long long gcd(unsigned long long x,unsigned long long y)
 
 void combination(int current,int index,int total)
 {
-	if(current==total)
+	unsigned long long lcm=1;
+
+	for(int i=0;i<current;++i)
 	{
-		unsigned long long lcm=1;
+		lcm/=gcd(lcm,select[i]);
+		lcm*=select[i];
+	}
 
-		for(int i=0;i<total;++i)
-		{
-			lcm/=gcd(lcm,select[i]);
-			lcm*=select[i];
-		}
-
-		if(total&1)
+	if(current)
+	{
+		if(current&1)
 		{
 			answer-=L/lcm;
 			answer+=R/lcm;
@@ -46,9 +46,10 @@ void combination(int current,int index,int total)
 			answer-=R/lcm;
 			answer+=L/lcm;
 		}
-
-		return;
 	}
+
+	if(current==total)
+		return;
 
 	for(int i=index;i<N;++i)
 	{
@@ -65,8 +66,7 @@ int main(void)
 	for(int n=0;n<N;++n)
 		scanf("%llu", &A[n]);
 
-	for(int n=1;n<=N;++n)
-		combination(0,0,n);
+	combination(0,0,N);
 
 	printf("%llu", answer);
 	return 0;
