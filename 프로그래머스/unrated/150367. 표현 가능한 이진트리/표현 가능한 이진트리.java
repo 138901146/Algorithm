@@ -1,6 +1,6 @@
 class Solution {
     public int[] solution(long[] numbers) {
-        int[] answer=new int[numbers.length], bit=new int[64], left=new int[64], right=new int[64], level=new int[64];
+        int[] answer=new int[numbers.length], bit=new int[64], level=new int[64], queue=new int[64];
         
         for(int i=1;i<64;i++) {
             int count=0, temp=i;
@@ -12,9 +12,8 @@ class Solution {
         }
         
         for(int i=0;i<numbers.length;i++) {
-            answer[i]=1;
             long temp=numbers[i];
-            int size=0;
+            int size=0, front=0, rear=0, count=0;
             
             while(temp>0) {
                 size++;
@@ -28,20 +27,23 @@ class Solution {
 
             temp=numbers[i];
             for(int j=size;j>0;j--,temp>>=1) {
-                left[j]=right[j]=0;
                 bit[j]=(int)(temp&1L);
+                count+=bit[j];
             }
             
-        for(int j=2;j<=size;j++)
-            left[j]=bit[j-1]==1?0:left[j-1]+1;
-        for(int j=size-1;j>0;j--)
-            right[j]=bit[j+1]==1?0:right[j+1]+1;
-
-        for(int j=1;j<=size;j++)
-            if(bit[j]==0 && (left[j]<(1<<level[j])-1 || right[j]<(1<<level[j])-1)) {
-                answer[i]=0;
-                break;
+            if(bit[(size+1)/2]==1)
+                queue[rear++]=(size+1)/2;
+            while(front<rear) {
+                if(level[queue[front]]>0) {
+                    if(bit[queue[front]+(1<<level[queue[front]]-1)]==1)
+                        queue[rear++]=queue[front]+(1<<level[queue[front]]-1);
+                    if(bit[queue[front]-(1<<level[queue[front]]-1)]==1)
+                        queue[rear++]=queue[front]-(1<<level[queue[front]]-1);
+                }
+                front++;
             }
+            
+            answer[i]=count==rear?1:0;
         }
         
         return answer;
