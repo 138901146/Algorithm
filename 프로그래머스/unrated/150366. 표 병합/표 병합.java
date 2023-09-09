@@ -10,6 +10,13 @@ class Solution {
 		return parent[r][c] = findParent(parent[r][c] / 100, parent[r][c] % 100);
 	}
 
+	void union(int r1,int c1,int r2,int c2) {
+		int root=findParent(r1,c1), temp=findParent(r2,c2);
+		
+		if(temp!=root)
+			parent[temp/100][temp%100]=root;
+	}
+    
 	public String[] solution(String[] commands) {
 		int size = 0, r1, r2, c1, c2, count, root, temp, absorb;
 		String value1, value2;
@@ -62,20 +69,10 @@ class Solution {
 				value1 = sheet[root / 100][root % 100] == null ? sheet[absorb / 100][absorb % 100]
 						: sheet[root / 100][root % 100];
 
-				for (int r = 1; r < 51; r++)
-					for (int c = 1; c < 51; c++) {
-						temp = findParent(r, c);
 
-						if (temp == root || temp == absorb)
-							queue[count++] = 100 * r + c;
-					}
-
-				for (int j = 0; j < count; j++) {
-					parent[queue[j] / 100][queue[j] % 100] = 100 * r1 + c1;
-					sheet[queue[j] / 100][queue[j] % 100] = null;
-				}
-
-				sheet[r1][c1] = value1;
+                union(r1,c1,r2,c2);
+                
+				sheet[root/100][root%100] = value1;
 				break;
 			case 'N':
 				st.nextToken();
