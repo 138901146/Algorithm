@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	int N, M, min[100][100], queue[65536], front=0, rear=1, move[4][2]={{-1,0},{0,-1},{0,1},{1,0}};
+	int N, M, min[100][100], queue[16384], front=0, rear=1, move[4][2]={{-1,0},{0,-1},{0,1},{1,0}};
 	bool wall[100][100];
 
 	scanf("%d%d", &M, &N);
@@ -19,13 +19,13 @@ int main(void)
 
 	while(front<rear)
 	{
-		int r=queue[front&65535]>>7, c=queue[front&65535]&127;
+		int r=queue[front&16383]>>7, c=queue[front&16383]&127;
 
 		for(int i=0;i<4;++i)
 			if(r+move[i][0]>=0 && r+move[i][0]<N && c+move[i][1]>=0 && c+move[i][1]<M && min[r+move[i][0]][c+move[i][1]]>min[r][c]+wall[r+move[i][0]][c+move[i][1]])
 			{
 				min[r+move[i][0]][c+move[i][1]]=min[r][c]+wall[r+move[i][0]][c+move[i][1]];
-				queue[rear++&65535]=(r+move[i][0])<<7|c+move[i][1];
+				queue[rear++&16383]=(r+move[i][0])<<7|c+move[i][1];
 			}
 
 		++front;
