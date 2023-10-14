@@ -2,10 +2,10 @@
 
 int main(void)
 {
-	unsigned long long int n;
+	long long n;
 
-	scanf("%llu", &n);
-	printf("%llu\n", 4*n);
+	scanf("%lld", &n);
+	printf("%lld", n<<2);
 
 	return 0;
 }
