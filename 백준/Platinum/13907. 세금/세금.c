@@ -7,7 +7,7 @@ typedef struct
 }
 node;
 
-int size=1, distance[1001][1001];
+int size=1;
 node pq[2000000];
 
 node get(void)
@@ -53,7 +53,7 @@ void add(node value)
 
 int main(void)
 {
-	int N, M, K, S, D, A, sum=0, *city_count=NULL, **road=NULL;
+	int N, M, K, S, D, A, sum=0, *city_count=NULL, **road=NULL, **distance=NULL;
 	long long min=1000000000;
 	node **city=NULL;
 
@@ -92,11 +92,12 @@ int main(void)
 	}
 	free(road);
 
+	distance=(int **)malloc((N+1)*sizeof(int *));
 	for(int n=1;n<=N;++n)
 	{
+		distance[n]=(int *)malloc(1001*sizeof(int));
 		for(int i=0;i<1001;++i)
 			distance[n][i]=1000000000;
-		distance[S][n]=0;
 	}
 	distance[S][0]=0;
 
@@ -136,7 +137,11 @@ int main(void)
 	}
 
 	for(int n=1;n<=N;++n)
+	{
+		free(distance[n]);
 		free(city[n]);
+	}
+	free(distance);
 	free(city);
 	free(city_count);
 	return 0;
