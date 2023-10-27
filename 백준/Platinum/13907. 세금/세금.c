@@ -7,7 +7,7 @@ typedef struct
 }
 node;
 
-int size=1, city_count[1001]={0}, road[30000][3], distance[1001][1001];
+int size=1, distance[1001][1001];
 node pq[2000000];
 
 node get(void)
@@ -53,17 +53,20 @@ void add(node value)
 
 int main(void)
 {
-	int N, M, K, S, D, A, sum=0;
+	int N, M, K, S, D, A, sum=0, *city_count=NULL, **road=NULL;
 	long long min=1000000000;
 	node **city=NULL;
 
 	scanf("%d%d%d", &N, &M, &K);
 	city=(node **)malloc((N+1)*sizeof(node *));
+	city_count=(int *)calloc(N+1,sizeof(int));
+	road=(int **)malloc(M*sizeof(int *));
 
 	scanf("%d%d", &S, &D);
 
 	for(int m=0;m<M;++m)
 	{
+		road[m]=(int *)malloc(3*sizeof(int));
 		for(int i=0;i<2;++i)
 		{
 			scanf("%d", &road[m][i]);
@@ -79,11 +82,15 @@ int main(void)
 	}
 
 	for(int m=0;m<M;++m)
+	{
 		for(int i=0;i<2;++i)
 		{
 			city[road[m][i]][city_count[road[m][i]]].destination=road[m][i^1];
 			city[road[m][i]][city_count[road[m][i]]++].fee=road[m][2];
 		}
+		free(road[m]);
+	}
+	free(road);
 
 	for(int n=1;n<=N;++n)
 	{
@@ -131,5 +138,6 @@ int main(void)
 	for(int n=1;n<=N;++n)
 		free(city[n]);
 	free(city);
+	free(city_count);
 	return 0;
 }
