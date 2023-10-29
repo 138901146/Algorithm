@@ -12,7 +12,7 @@ int compare(const void *x,const void *y)
 	return ((location *)x)->o<((location *)y)->o || ((location *)x)->o==((location *)y)->o && ((location *)x)->h<((location *)y)->h ? -1 : 1;
 }
 
-int *pq=NULL, size=1;
+int pq[100001], size=1;
 
 int get()
 {
@@ -58,11 +58,9 @@ void add(int value)
 int main(void)
 {
 	int n, d, count=0;
-	location *work=NULL;
+	location work[100000];
 
 	scanf("%d", &n);
-	work=(location *)malloc(n*sizeof(location));
-	pq=(int *)malloc((n+1)*sizeof(int));
 
 	for(int i=0;i<n;++i)
 	{
@@ -90,7 +88,5 @@ int main(void)
 	}
 
 	printf("%d", count);
-	free(work);
-	free(pq);
 	return 0;
 }
