@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-int pq[50], pick[50], size=1;
+int pq[50], size=1;
 
 int get(void)
 {
@@ -10,9 +10,9 @@ int get(void)
 
 	while(index<size)
 	{
-		int left=index<<1, right=left|1, next=right<size?pick[pq[left]]>pick[pq[right]]?left:right:right==size?left:index;
+		int left=index<<1, right=left|1, next=right<size?pq[left]>pq[right]?left:right:right==size?left:index;
 
-		if(pick[pq[index]]>=pick[pq[next]])
+		if(pq[index]>=pq[next])
 			break;
 
 		int temp=pq[index];
@@ -33,7 +33,7 @@ void add(int value)
 	{
 		int next=index>>1;
 
-		if(pick[pq[index]]<=pick[pq[next]])
+		if(pq[index]<=pq[next])
 			break;
 
 		int temp=pq[index];
@@ -45,7 +45,7 @@ void add(int value)
 
 int main(void)
 {
-	int N, dasom, count=0;
+	int N, dasom, pick, count=0;
 
 	scanf("%d", &N);
 
@@ -56,19 +56,18 @@ int main(void)
 	}
 
 	scanf("%d", &dasom);
-	for(int n=1;n<N;++n)
+	while(--N)
 	{
-		scanf("%d", &pick[n]);
-		add(n);
+		scanf("%d", &pick);
+		add(pick);
 	}
 
-	while(pick[pq[1]]>=dasom)
+	while(pq[1]>=dasom)
 	{
 		int first=get();
-		--pick[first];
 		++dasom;
 		++count;
-		add(first);
+		add(first-1);
 	}
 
 	printf("%d", count);
