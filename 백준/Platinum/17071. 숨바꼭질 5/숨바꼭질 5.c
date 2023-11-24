@@ -8,24 +8,9 @@ int main(void)
 
 	scanf("%d%d", &N, &K);
 
-	if(N==K)
-	{
-		printf("0");
-		return 0;
-	}
-
-	while(K+((time*time+time)>>1)<=500000)
-		++time;
-	if(time<23 && N*(1<<time)<=500000)
-	{
-		printf("-1");
-		return 0;
-	}
-
 	for(int i=0;i<500001;++i)
 		visited[0][i]=visited[1][i]=100000000;
 
-	time=0;
 	queue[0]=N;
 	visited[0][N]=0;
 	while(front<rear)
@@ -61,15 +46,12 @@ int main(void)
 	time=0;
 	while(K<=500000)
 	{
-		K+=time++;
-
-		if(K>500000)
-			break;
-
-		if(visited[time&1^1][K]<=time && time<min)
+		if(visited[time&1][K]<=time && time<min)
 			min=time;
+
+		K+=++time;
 	}
 
-	printf("%d", min==100000000?-1:min-1);
+	printf("%d", min==100000000?-1:min);
 	return 0;
 }
