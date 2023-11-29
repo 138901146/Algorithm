@@ -3,13 +3,13 @@
 #include<malloc.h>
 
 bool *visited=NULL;
-int **row_list=NULL, *row_list_size=NULL, *occupied=NULL;
+int **row=NULL, *row_size=NULL, *occupied=NULL;
 
 bool dfs(int current)
 {
-	for(int i=0;i<row_list_size[current];++i)
+	for(int i=0;i<row_size[current];++i)
 	{
-		int col=row_list[current][i];
+		int col=row[current][i];
 
 		if(!visited[col])
 		{
@@ -28,13 +28,13 @@ bool dfs(int current)
 
 int main(void)
 {
-	int R, C, N, row_count=1, col_count=0, max=0;
+	int R, C, N, max=0;
 	bool **empty=NULL;
 
 	scanf("%d%d%d", &R, &C, &N);
 	empty=(bool **)malloc((R+1)*sizeof(bool *));
-	row_list=(int **)malloc((R+1)*sizeof(int *));
-	row_list_size=(int *)calloc(R+1,sizeof(int));
+	row=(int **)malloc((R+1)*sizeof(int *));
+	row_size=(int *)calloc(R+1,sizeof(int));
 
 	for(int r=1;r<=R;++r)
 		empty[r]=(bool *)calloc(C+1,sizeof(bool));
@@ -52,14 +52,14 @@ int main(void)
 	{
 		for(int c=1;c<=C;++c)
 			if(!empty[r][c])
-				++row_list_size[r];
+				++row_size[r];
 
-		row_list[r]=(int *)malloc(row_list_size[r]*sizeof(int));
-		row_list_size[r]=0;
+		row[r]=(int *)malloc(row_size[r]*sizeof(int));
+		row_size[r]=0;
 
 		for(int c=1;c<=C;++c)
 			if(!empty[r][c])
-				row_list[r][row_list_size[r]++]=c;
+				row[r][row_size[r]++]=c;
 
 		free(empty[r]);
 	}
@@ -81,9 +81,9 @@ int main(void)
 
 	printf("%d", max);
 	for(int r=1;r<=R;++r)
-		free(row_list[r]);
-	free(row_list);
-	free(row_list_size);
+		free(row[r]);
+	free(row);
+	free(row_size);
 	free(occupied);
 	free(visited);
 	return 0;
