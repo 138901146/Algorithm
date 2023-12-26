@@ -19,8 +19,8 @@ void init(int *arr,merge_sort_tree *tree,int node,int start,int end)
 	{
 		int left=node<<1, right=left|1, left_size=0, right_size=0;
 
-		init(arr,tree,left,start,(start+end)>>1);
-		init(arr,tree,right,((start+end)>>1)+1,end);
+		init(arr,tree,left,start,start+end>>1);
+		init(arr,tree,right,(start+end>>1)+1,end);
 		tree[node].size=tree[left].size+tree[right].size;
 		tree[node].list=(int *)malloc(tree[node].size*sizeof(int));
 
@@ -60,14 +60,14 @@ int get(merge_sort_tree *tree,int node,int start,int end,int left,int right,int 
 		return end-start+1-ans;
 	}
 	else
-		return get(tree,node<<1,start,(start+end)>>1,left,right,k)+get(tree,node<<1|1,((start+end)>>1)+1,end,left,right,k);
+		return get(tree,node<<1,start,start+end>>1,left,right,k)+get(tree,node<<1|1,(start+end>>1)+1,end,left,right,k);
 }
 
 void free_tree(merge_sort_tree *tree,int node,int start,int end)
 {
 	if(start!=end)
 	{
-		free_tree(tree,node<<1,start,(start+end)>>1);
+		free_tree(tree,node<<1,start,start+end>>1);
 		free_tree(tree,node<<1|1,(start+end>>1)+1,end);
 	}
 	free(tree[node].list);
