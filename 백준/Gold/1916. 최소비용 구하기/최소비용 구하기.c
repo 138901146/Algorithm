@@ -3,115 +3,149 @@
 
 typedef struct
 {
-	int source, destination;
-	long long fee;
+	int vertex, weight;
 }
-bus;
+node;
 
-bus *pq=NULL;
-int size=2;
+typedef struct
+{
+	int from, to, cost;
+}
+edge;
 
-bus get(void)
+node *pq=NULL;
+int size=1, *pq_index=NULL, INF=1000000000;
+
+node get(void)
 {
 	int index=1;
+
 	pq[0]=pq[1];
+	pq_index[pq[1].vertex]=size-1;
+
 	pq[1]=pq[--size];
+	pq[size]=pq[0];
+	pq_index[pq[1].vertex]=1;
 
 	while(index<size)
 	{
-		int left=index<<1, right=left|1, next=right<size?pq[left].fee<pq[right].fee?left:right:right==size?left:index;
+		int left=index<<1, right=left|1, next=right<size?pq[left].weight<pq[right].weight?left:right:right==size?left:index;
 
-		if(pq[index].fee<=pq[next].fee)
+		if(pq[index].weight<=pq[next].weight)
 			break;
 
-		bus temp=pq[index];
+		int swap_index=pq_index[pq[index].vertex];
+		pq_index[pq[index].vertex]=pq_index[pq[next].vertex];
+		pq_index[pq[next].vertex]=swap_index;
+		node swap_node=pq[index];
 		pq[index]=pq[next];
-		pq[next]=temp;
+		pq[next]=swap_node;
 		index=next;
 	}
 
 	return pq[0];
 }
 
-void add(bus value)
+void add(node value)
 {
-	int index=size;
-	pq[size++]=value;
+	int index=pq_index[value.vertex];
+
+	pq[index]=value;
+
+	if(index>=size)
+	{
+		int swap_index=pq[size].vertex;
+		pq_index[pq[size].vertex]=index;
+		pq_index[value.vertex]=size;
+		node swap_node=pq[index];
+		pq[index]=pq[size];
+		pq[size]=swap_node;
+		index=size++;
+	}
 
 	while(index>1)
 	{
 		int next=index>>1;
 
-		if(pq[index].fee>=pq[next].fee)
+		if(pq[next].weight<=pq[index].weight)
 			break;
 
-		pq[0]=pq[index];
+		int swap_index=pq_index[pq[index].vertex];
+		pq_index[pq[index].vertex]=pq_index[pq[next].vertex];
+		pq_index[pq[next].vertex]=swap_index;
+		node swap_node=pq[index];
 		pq[index]=pq[next];
-		pq[next]=pq[0];
+		pq[next]=swap_node;
 		index=next;
 	}
 }
 
 int main(void)
 {
-	int N, M, *vertex_count=NULL, departure, arrival;
-	bus *edge=NULL, **vertex=NULL, *min=NULL;
+	int N, M, A, B, *adjacent_list_count=NULL, *shortest_path=NULL;
+	node **adjacent_list=NULL;
+	edge *edges=NULL;
 
 	scanf("%d", &N);
 	scanf("%d", &M);
-	vertex=(bus **)malloc((N+1)*sizeof(bus *));
-	vertex_count=(int *)calloc(N+1,sizeof(int));
-	edge=(bus *)malloc(M*sizeof(bus));
-	min=(bus *)malloc((N+1)*sizeof(bus));
+	adjacent_list=(node **)malloc((N+1)*sizeof(node *));
+	adjacent_list_count=(int *)calloc(N+1,sizeof(int));
+	edges=(edge *)malloc(M*sizeof(edge));
 
 	for(int m=0;m<M;++m)
 	{
-		scanf("%d%d%lld", &edge[m].source, &edge[m].destination, &edge[m].fee);
-		++vertex_count[edge[m].source];
+		scanf("%d%d%d", &edges[m].from, &edges[m].to, &edges[m].cost);
+		++adjacent_list_count[edges[m].from];
 	}
 
 	for(int n=1;n<=N;++n)
 	{
-		vertex[n]=(bus *)malloc(vertex_count[n]*sizeof(bus));
-		vertex_count[n]=0;
-		min[n].source=n;
-		min[n].fee=100000000000;
+		adjacent_list[n]=(node *)malloc(adjacent_list_count[n]*sizeof(node));
+		adjacent_list_count[n]=0;
 	}
 
 	for(int m=0;m<M;++m)
-		vertex[edge[m].source][vertex_count[edge[m].source]++]=edge[m];
-	free(edge);
+	{
+		adjacent_list[edges[m].from][adjacent_list_count[edges[m].from]].vertex=edges[m].to;
+		adjacent_list[edges[m].from][adjacent_list_count[edges[m].from]++].weight=edges[m].cost;
+	}
+	free(edges);
 
-	pq=(bus *)malloc(N*1001*sizeof(bus));
-	scanf("%d%d", &departure, &arrival);
-	min[departure].fee=0;
-	pq[1]=min[departure];
+	scanf("%d%d", &A, &B);
+	shortest_path=(int *)malloc((N+1)*sizeof(int));
+	pq_index=(int *)malloc((N+1)*sizeof(int));
+	pq=(node *)malloc((N+1)*sizeof(node));
+	for(int n=1;n<=N;++n)
+	{
+		pq[n].vertex=pq_index[n]=n;
+		pq[n].weight=shortest_path[n]=INF;
+	}
+	pq[A].weight=shortest_path[A]=0;
 
+	add(pq[A]);
 	while(size>1)
 	{
-		bus current=get();
+		node current=get();
 
-		if(current.fee!=min[current.source].fee)
-			continue;
-
-		for(int i=0;i<vertex_count[current.source];++i)
+		for(int i=0;i<adjacent_list_count[current.vertex];++i)
 		{
-			bus next=vertex[current.source][i];
+			node next=adjacent_list[current.vertex][i];
 
-			if(min[next.destination].fee>min[current.source].fee+next.fee)
+			if(current.weight+next.weight<shortest_path[next.vertex])
 			{
-				min[next.destination].fee=min[next.source].fee+next.fee;
-				add(min[next.destination]);
+				next.weight=shortest_path[next.vertex]=current.weight+next.weight;
+				add(next);
 			}
 		}
 	}
 
-	printf("%lld", min[arrival].fee);
+	printf("%d", shortest_path[B]);
 	while(N)
-		free(vertex[N--]);
-	free(vertex);
-	free(min);
+		free(adjacent_list[N--]);
+	free(adjacent_list_count);
+	free(adjacent_list);
+	free(shortest_path);
 	free(pq);
-	free(vertex_count);
+	free(pq_index);
 	return 0;
 }
