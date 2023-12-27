@@ -1,150 +1,155 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
+#include<malloc.h>
 
-int *vertex=NULL, *pq=NULL, size=1;
-
-void add(int value)
+typedef struct
 {
-	pq[size++]=value;
-	int index=size-1;
-
-	while(index>1)
-		if(vertex[pq[index]]<=vertex[pq[index>>1]])
-		{
-			int temp=pq[index];
-			pq[index]=pq[index>>1];
-			pq[index>>1]=temp;
-			index>>=1;
-		}
-		else
-			break;
+	int vertex, weight;
 }
+node;
 
-int get()
+typedef struct
 {
-	bool set=false;
-	int value=pq[1], index=1;
-	pq[1]=pq[--size];
+	int u, v, w;
+}
+edge;
 
-	while(index<size &&!set)
+node *pq=NULL;
+int size=1, *pq_index=NULL, INF=1000000000;
+
+node get(void)
+{
+	int index=1;
+
+	pq[0]=pq[1];
+	pq_index[pq[1].vertex]=size-1;
+
+	pq[1]=pq[--size];
+	pq[size]=pq[0];
+	pq_index[pq[1].vertex]=1;
+
+	while(index<size)
 	{
-		if(index*2+1<size)
-		{
-			if(vertex[pq[index*2+1]]<vertex[pq[index*2]])
-			{
-				if(vertex[pq[index]]>=vertex[pq[index*2+1]])
-				{
-					int temp=pq[index];
-					pq[index]=pq[index*2+1];
-					pq[index*2+1]=temp;
-					index=(index<<1)+1;
-				}
-				else
-					set=true;
-			}
-			else
-			{
-				if(vertex[pq[index]]>=vertex[pq[index*2]])
-				{
-					int temp=pq[index];
-					pq[index]=pq[index*2];
-					pq[index*2]=temp;
-					index<<=1;
-				}
-				else
-					set=true;
-			}
-		}
-		else if(index*2+1==size)
-		{
-				if(vertex[pq[index]]>=vertex[pq[index*2]])
-				{
-					int temp=pq[index];
-					pq[index]=pq[index*2];
-					pq[index*2]=temp;
-					index<<=1;
-				}
-				else
-					set=true;
-		}
-		else
-			set=true;
+		int left=index<<1, right=left|1, next=right<size?pq[left].weight<pq[right].weight?left:right:right==size?left:index;
+
+		if(pq[index].weight<=pq[next].weight)
+			break;
+
+		int swap_index=pq_index[pq[index].vertex];
+		pq_index[pq[index].vertex]=pq_index[pq[next].vertex];
+		pq_index[pq[next].vertex]=swap_index;
+		node swap_node=pq[index];
+		pq[index]=pq[next];
+		pq[next]=swap_node;
+		index=next;
 	}
 
-	return value;
+	return pq[0];
+}
+
+void add(node value)
+{
+	int index=pq_index[value.vertex];
+
+	pq[index]=value;
+
+	if(index>=size)
+	{
+		int swap_index=pq[size].vertex;
+		pq_index[pq[size].vertex]=index;
+		pq_index[value.vertex]=size;
+		node swap_node=pq[index];
+		pq[index]=pq[size];
+		pq[size]=swap_node;
+		index=size++;
+	}
+
+	while(index>1)
+	{
+		int next=index>>1;
+
+		if(pq[next].weight<=pq[index].weight)
+			break;
+
+		int swap_index=pq_index[pq[index].vertex];
+		pq_index[pq[index].vertex]=pq_index[pq[next].vertex];
+		pq_index[pq[next].vertex]=swap_index;
+		node swap_node=pq[index];
+		pq[index]=pq[next];
+		pq[next]=swap_node;
+		index=next;
+	}
 }
 
 int main(void)
 {
-	int V, E, **edge=NULL, K, *edge_count=NULL, ***local_edge=NULL;
+	int V, E, K, *adjacent_list_count=NULL, *shortest_path=NULL;
+	node **adjacent_list=NULL;
+	edge *edges=NULL;
 
 	scanf("%d%d", &V, &E);
 	scanf("%d", &K);
-	vertex=(int *)malloc((V+1)*sizeof(int));
-	edge_count=(int *)calloc(V+1,sizeof(int));
-	edge=(int **)malloc(E*sizeof(int *));
-	local_edge=(int ***)malloc((V+1)*sizeof(int **));
-	pq=(int *)malloc(1000*(V+1)*sizeof(int));
-	for(int v=1;v<=V;v++)
-		vertex[v]=1<<29;
-	for(int e=0;e<E;e++)
+	adjacent_list=(node **)malloc((V+1)*sizeof(node *));
+	adjacent_list_count=(int *)calloc(V+1,sizeof(int));
+	edges=(edge *)malloc(E*sizeof(edge));
+
+	for(int e=0;e<E;++e)
 	{
-		edge[e]=(int *)malloc(3*sizeof(int));
-		for(int i=0;i<3;i++)
-			scanf("%d", &edge[e][i]);
-		edge_count[edge[e][0]]++;
+		scanf("%d%d%d", &edges[e].u, &edges[e].v, &edges[e].w);
+		++adjacent_list_count[edges[e].u];
 	}
 
-	for(int v=1;v<=V;v++)
+	for(int v=1;v<=V;++v)
 	{
-		local_edge[v]=(int **)malloc(edge_count[v]*sizeof(int *));
-		for(int i=0;i<edge_count[v];i++)
-			local_edge[v][i]=(int *)malloc(2*sizeof(int));
-		edge_count[v]=0;
+		adjacent_list[v]=(node *)malloc(adjacent_list_count[v]*sizeof(node));
+		adjacent_list_count[v]=0;
 	}
 
-	for(int e=0;e<E;e++)
+	for(int e=0;e<E;++e)
 	{
-		local_edge[edge[e][0]][edge_count[edge[e][0]]][0]=edge[e][1];
-		local_edge[edge[e][0]][edge_count[edge[e][0]]++][1]=edge[e][2];
-		free(edge[e]);
+		adjacent_list[edges[e].u][adjacent_list_count[edges[e].u]].vertex=edges[e].v;
+		adjacent_list[edges[e].u][adjacent_list_count[edges[e].u]++].weight=edges[e].w;
 	}
-	free(edge);
+	free(edges);
 
-	vertex[K]=0;
-	for(int i=0;i<edge_count[K];i++)
-		if(local_edge[K][i][1]<vertex[local_edge[K][i][0]])
-			vertex[local_edge[K][i][0]]=local_edge[K][i][1];
+	shortest_path=(int *)malloc((V+1)*sizeof(int));
+	pq_index=(int *)malloc((V+1)*sizeof(int));
+	pq=(node *)malloc((V+1)*sizeof(node));
+	for(int v=1;v<=V;++v)
+	{
+		pq[v].vertex=pq_index[v]=v;
+		pq[v].weight=shortest_path[v]=INF;
+	}
+	pq[K].weight=shortest_path[K]=0;
 
-	for(int v=1;v<=V;v++)
-		add(v);
-
+	add(pq[K]);
 	while(size>1)
 	{
-		int target=get();
+		node current=get();
 
-		for(int i=0;i<edge_count[target];i++)
-			if(vertex[local_edge[target][i][0]]>vertex[target]+local_edge[target][i][1])
+		for(int i=0;i<adjacent_list_count[current.vertex];++i)
+		{
+			node next=adjacent_list[current.vertex][i];
+
+			if(current.weight+next.weight<shortest_path[next.vertex])
 			{
-				vertex[local_edge[target][i][0]]=vertex[target]+local_edge[target][i][1];
-				add(local_edge[target][i][0]);
+				next.weight=shortest_path[next.vertex]=current.weight+next.weight;
+				add(next);
 			}
+		}
 	}
 
-	for(int v=1;v<=V;v++)
+	for(int v=1;v<=V;++v)
 	{
-		if(vertex[v]==1<<29)
+		if(shortest_path[v]==INF)
 			printf("INF\n");
 		else
-			printf("%d\n", vertex[v]);
-		for(int i=0;i<edge_count[v];i++)
-			free(local_edge[v][i]);
-		free(local_edge[v]);
+			printf("%d\n", shortest_path[v]);
+		free(adjacent_list[v]);
 	}
-	free(local_edge);
-	free(edge_count);
-	free(vertex);
+	free(adjacent_list_count);
+	free(adjacent_list);
+	free(shortest_path);
 	free(pq);
+	free(pq_index);
 	return 0;
 }
