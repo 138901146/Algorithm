@@ -1,6 +1,4 @@
 #include<stdio.h>
-#include<string.h>
-#include<stdbool.h>
 
 typedef struct
 {
@@ -8,27 +6,24 @@ typedef struct
 }
 structure;
 
-char str[1000001]={'\0'}, compare[37]={'\0'};
-int top=0, table[123], str_length, compare_length, deleted_count=0;
+char str[1000001]={'\0'}, compare[37]={'\0'}, answer[1000001]={'\0'};
+int top=0, table[123], str_length=0, compare_length=0, deleted_count=0, answer_length=0;
 structure stack[1000001];
-bool deleted[1000001]={false};
 
 int main(void)
 {
 	scanf("%s", str);
 	scanf("%s", compare);
 
-	str_length=strlen(str);
-	compare_length=strlen(compare);
-
 	for(int i=0;i<123;++i)
 		table[i]=-1;
 
-	for(int i=0;i<compare_length;++i)
-		table[compare[i]]=i;
+	for(int i=0;compare[i]!='\0';++i)
+		table[compare[i]]=compare_length++;
 
-	for(int i=0;i<str_length;++i)
+	for(int i=0;str[i]!='\0';++i)
 	{
+		answer[answer_length++]=str[str_length++];
 		if(table[str[i]]!=-1)
 		{
 			if(top==0)
@@ -63,10 +58,9 @@ int main(void)
 
 			if(stack[top-1].continuous==compare_length)
 			{
-				for(int j=0;j<compare_length;++j)
-					deleted[stack[top-1-j].index]=true;
 				top-=compare_length;
 				deleted_count+=compare_length;
+				answer_length-=compare_length;
 			}
 		}
 		else
@@ -76,9 +70,8 @@ int main(void)
 	if(deleted_count==str_length)
 		printf("FRULA");
 	else
-		for(int i=0;i<str_length;++i)
-			if(!deleted[i])
-				printf("%c", str[i]);
+		for(int i=0;i<answer_length;++i)
+			printf("%c", answer[i]);
 
 	return 0;
 }
