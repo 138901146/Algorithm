@@ -71,7 +71,7 @@ int main(void)
 
 	while(K--)
 	{
-		int u, v, LCA, x, y, left=0, right=17, found=0;
+		int u, v, LCA, x, y, found=0;
 
 		scanf("%d%d", &u, &v);
 
@@ -114,14 +114,15 @@ int main(void)
 
 		x=distance[u]<distance[v]?v:u;
 		long long cost=(distance[u]+distance[v]>>1)-distance[LCA];
+		y=17;
 
-		while(left<=right)
+		while(0<=y)
 		{
-			int mid=left+right>>1;
+			int mid=y>>1;
 
 			if(!parent[x][mid])
 			{
-				right=mid-1;
+				y=mid-1;
 				continue;
 			}
 
@@ -139,7 +140,7 @@ int main(void)
 				cost-=temp;
 			}
 			else
-				right=mid-1;
+				y=mid-1;
 		}
 
 		printf("%d\n", found?x:-1);
