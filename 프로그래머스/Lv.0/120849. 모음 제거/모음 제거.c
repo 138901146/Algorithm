@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+// 파라미터로 주어지는 문자열은 const로 주어집니다. 변경하려면 문자열을 복사해서 사용하세요.
+char* solution(const char* my_string) {
+    int length=strlen(my_string), vowel=0;
+    
+    for(int i=0;i<length;++i)
+        vowel+=my_string[i]=='a'||my_string[i]=='e'||my_string[i]=='i'||my_string[i]=='o'||my_string[i]=='u';
+    // return 값은 malloc 등 동적 할당을 사용해주세요. 할당 길이는 상황에 맞게 변경해주세요.
+    char* answer = (char*)calloc(length-vowel+1,sizeof(char));
+    
+    vowel=0;
+    for(int i=0;i<length;++i)
+        if(my_string[i]=='a'||my_string[i]=='e'||my_string[i]=='i'||my_string[i]=='o'||my_string[i]=='u')
+            ++vowel;
+        else
+            answer[i-vowel]=my_string[i];
+
+    return answer;
+}
