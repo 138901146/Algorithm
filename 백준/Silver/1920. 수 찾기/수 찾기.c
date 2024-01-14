@@ -4,50 +4,47 @@
 
 int compare(const void *x,const void *y)
 {
-    return *(int *)x>*(int *)y?1:*(int *)x==*(int *)y?0:-1;
+	return *(int *)x>*(int *)y?1:-1;
 }
 
 int main(void)
 {
-    int N, M, *A=NULL;
+	int N, M, *A=NULL, target;
 
-    scanf("%d", &N);
-    A=(int *)malloc(N*sizeof(int));
+	scanf("%d", &N);
+	A=(int *)malloc(N*sizeof(int));
 
-    for(int i=0;i<N;i++)
-        scanf("%d", &A[i]);
+	for(int n=0;n<N;++n)
+		scanf("%d", &A[n]);
+	qsort((void *)A,(size_t)N,sizeof(int),compare);
 
-    qsort((void *)A,(size_t)N,sizeof(int),compare);
+	scanf("%d", &M);
 
-    scanf("%d", &M);
+	while(M--)
+	{
+		scanf("%d", &target);
 
-    for(int i=0;i<M;i++)
-    {
-        int number;
-        bool found=false;
+		int left=0, right=N-1, mid;
+		bool found=false;
 
-        scanf("%d", &number);
+		while(left<=right)
+		{
+			mid=left+right>>1;
 
-        if(number<=A[N/2])
-        {
-            for(int j=0;A[j]<=number;j++)
-                if(A[j]==number)
-                {
-                    found=true;
-                    break;
-                }
-        }
-        else
-            for(int j=N-1;A[j]>=number;j--)
-                if(A[j]==number)
-                {
-                    found=true;
-                    break;
-                }
+			if(A[mid]==target)
+			{
+				found=true;
+				break;
+			}
+			else if(A[mid]<target)
+				left=mid+1;
+			else
+				right=mid-1;
+		}
 
-        printf("%d\n", found);
-    }
+		printf("%d\n", found);
+	}
 
-    free(A);
-    return 0;
+	free(A);
+	return 0;
 }
