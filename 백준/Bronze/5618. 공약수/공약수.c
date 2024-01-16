@@ -23,7 +23,7 @@ int gcd(int x,int y)
 
 int main(void)
 {
-	int n, number, gcd_value, divisor[75]={1}, divisor_count=1, root;
+	int n, number, gcd_value, divisor[73]={1}, divisor_count=1, root;
 
 	scanf("%d", &n);
 
