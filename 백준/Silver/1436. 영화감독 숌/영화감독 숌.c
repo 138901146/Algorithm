@@ -1,23 +1,29 @@
 #include<stdio.h>
-#include<string.h>
 
 int main(void)
 {
-	int N, count=0, arr[10000]={0, };
-	char num[1000000]={'\0', };
+	int N, number=665;
 
 	scanf("%d", &N);
 
-	for(int i=666;count<N;i++)
+	while(N)
 	{
-    	num[0]='\0';
+		int temp=++number, max=0, continuous=0;
 
-		sprintf(num,"%d",i);
-		if(strstr(num,"666")!=NULL)
-			arr[count++]=i;
+		while(temp)
+		{
+			if(temp%10==6)
+				max=++continuous>max?continuous:max;
+			else
+				continuous=0;
+
+			temp/=10;
+		}
+
+		if(max>2)
+			--N;
 	}
 
-	printf("%d\n", arr[count-1]);
-
+	printf("%d", number);
 	return 0;
 }
