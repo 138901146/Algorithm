@@ -1,5 +1,6 @@
 #include<stdio.h>
-#include<malloc.h>
+
+int max[2097152], min[2091752];
 
 void init(int *tree,int node,int start,int end,int is_min)
 {
@@ -49,20 +50,13 @@ void update(int *tree,int node,int start,int end,int index,int value,int is_min)
 
 int main(void)
 {
-	int T;
+	int T, N, K, Q, A, B;
 
 	scanf("%d", &T);
 
 	while(T--)
 	{
-		int N, K, Q, A, B, size=0, *min=NULL, *max=NULL;
-
 		scanf("%d%d", &N, &K);
-		while((1<<size)<N)
-			++size;
-		size=1<<++size;
-		min=(int *)malloc(size*sizeof(int));
-		max=(int *)malloc(size*sizeof(int));
 
 		init(min,1,0,N-1,1);
 		init(max,1,0,N-1,0);
@@ -83,9 +77,6 @@ int main(void)
 				update(max,1,0,N-1,B,A_value,0);
 			}
 		}
-
-		free(min);
-		free(max);
 	}
 
 	return 0;
