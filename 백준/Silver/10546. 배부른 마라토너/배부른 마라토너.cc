@@ -19,10 +19,11 @@ int main(void)
 	{
 		cin >> name;
 
-		if(participant.find(name) == participant.end())
+		set<string>::iterator marathoner = participant.find(name);
+		if(marathoner == participant.end())
 			participant.insert(name);
 		else
-			participant.erase(name);
+			participant.erase(marathoner);
 	}
 
 	cout << *participant.begin();
