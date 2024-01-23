@@ -2,28 +2,31 @@
 
 int main(void)
 {
-	int T;
+	int T, A, B, lcm;
 
 	scanf("%d", &T);
 
-	for(int i=0;i<T;i++)
+	while(T--)
 	{
-		int A, B, temp;
+		scanf("%d%d", &A, &B);
 
-		scanf("%d %d", &A, &B);
+		lcm=A*B;
 
-		if(A>B)
+		if(A<B)
 		{
-			temp=A;
+			int temp=A;
 			A=B;
 			B=temp;
 		}
-		temp=B;
 
-		while(temp%A!=0)
-			temp+=B;
+		while(B)
+		{
+			int temp=A%B;
+			A=B;
+			B=temp;
+		}
 
-		printf("%d\n", temp);
+		printf("%d\n", lcm/A);
 	}
 
 	return 0;
