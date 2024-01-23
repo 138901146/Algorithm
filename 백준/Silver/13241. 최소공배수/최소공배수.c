@@ -2,20 +2,24 @@
 
 int main(void)
 {
-	unsigned long long int A, B, lcm;
+	long long A, B, mul, temp;
 
-	scanf("%llu %llu", &A, &B);
+	scanf("%lld%lld", &A, &B);
+
+	mul=A*B;
 	if(A<B)
 	{
-		lcm=A;
+		temp=A;
 		A=B;
-		B=lcm;
+		B=temp;
 	}
-	lcm=A;
 
-	while(lcm%B!=0)
-		lcm+=A;
+	while(B)
+	{
+		temp=A%B;
+		A=B;
+		B=temp;
+	}
 
-	printf("%llu\n", lcm);
-	return 0;
+	printf("%lld", mul/A);
 }
