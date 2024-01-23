@@ -4,27 +4,27 @@
 int main(void)
 {
 	int n;
-	bool is_prime[1000001]={false, false, true, };
+	bool prime[1000001];
 
-	for(int i=2;i<1000001;i++)
-		is_prime[i]=true;
-	for(int i=2;i<1000001;i++)
-		if(is_prime[i])
-			for(int j=2*i;j<1000001;j+=i)
-				is_prime[j]=false;
+	for(int i=2;i<1000001;++i)
+		prime[i]=true;
+	prime[1]=false;
+
+	for(int i=2;i<1001;++i)
+		if(prime[i])
+			for(int j=i<<1;j<1000001;j+=i)
+				prime[j]=false;
 
 	scanf("%d", &n);
-
-	while(n>0)
+	while(n)
 	{
 		bool found=false;
 
-		for(int i=3;i<=n/2;i+=2)
-			if(is_prime[i] && is_prime[n-i])
+		for(int i=3;i<<1<=n && !found;i+=2)
+			if(prime[i]&&prime[n-i])
 			{
 				printf("%d = %d + %d\n", n, i, n-i);
 				found=true;
-				break;
 			}
 
 		if(!found)
