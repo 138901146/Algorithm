@@ -10,6 +10,10 @@
 
 사칙연산, 구현, 수학
 
+### 제출 일자
+
+2024년 1월 28일 05:50:54
+
 ### 문제 설명
 
 <p>Given two integers, calculate and output their sum.</p>
