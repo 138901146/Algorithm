@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-int convert[27]={1, }, convert_count=0, best=1000000000, A, B, K;
+int convert[27]={1}, convert_count=0, best=1000000000, A, B, K;
 
 void find_best(int index,int temp)
 {
@@ -21,7 +21,7 @@ void find_best(int index,int temp)
 
 int main(void)
 {
-	int C, count=0, prime[27]={1, }, c, x=1, y=1, z;
+	int C, count=0, prime[27]={1}, c, x=1, y=1, z;
 
 	scanf("%d%d", &A, &B);
 
@@ -34,7 +34,7 @@ int main(void)
 	}
 
 	for(c=3;c<=C;c+=2)
-		if(C%c==0)
+		if(!(C%c))
 		{
 			prime[count++]=c;
 			C/=c;
@@ -42,17 +42,17 @@ int main(void)
 		}
 
 	convert[0]=prime[0];
-	for(int i=1;i<count;i++)
+	for(int i=1;i<count;++i)
 	{
 		if(prime[i]==prime[i-1])
 			convert[convert_count]*=prime[i];
 		else
 			convert[++convert_count]=prime[i];
 	}
-	convert_count++;
+	++convert_count;
 
-	for(int i=0;i<convert_count;i++)
-		for(int j=i+1;j<convert_count;j++)
+	for(int i=0;i<convert_count;++i)
+		for(int j=i+1;j<convert_count;++j)
 			if(convert[i]<convert[j])
 			{
 				int temp=convert[i];
@@ -69,6 +69,6 @@ int main(void)
 		x=y;
 		y=temp;
 	}
-	printf("%d %d\n", x*A, y*A);
+	printf("%d %d", x*A, y*A);
 	return 0;
 }
