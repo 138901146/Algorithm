@@ -1,42 +1,34 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+
+int N, queue[2000000], front=0, rear=0;
 
 int main(void)
 {
-	int state=0, *queue=NULL, N, alive=0;
-
 	scanf("%d", &N);
+	getchar();
 
-	queue=(int *)malloc(N*sizeof(int));
-	while(getchar()!='\n');
-
-	for(int i=0;i<N;i++)
+	while(N--)
 	{
-		char statement[15]={'\0', };
+		char query[15];
 
-		fgets(statement,sizeof(statement),stdin);
+		fgets(query,sizeof(query),stdin);
 
-		if(strncmp(statement,"push",4)==0)
+		if(query[0]=='p' && query[1]=='u')
 		{
-			int num=0;
-			for(int j=5;statement[j]!='\0';j++)
-				statement[j-5]=statement[j];
-			num=atoi(statement);
-			queue[state++]=num;
+			int num;
+			sscanf(query+4, "%d", &num);
+			queue[rear++]=num;
 		}
-		else if(strncmp(statement,"pop",3)==0)
-			printf("%d\n", state==alive?-1:queue[alive++]);
-		else if(strncmp(statement,"size",3)==0)
-			printf("%d\n", state-alive);
-		else if(strncmp(statement,"empty",5)==0)
-			printf("%d\n", state==alive);
-		else if(strncmp(statement,"back",4)==0)
-			printf("%d\n", state==alive?-1:queue[state-1]);
-		else if(strncmp(statement,"front",5)==0)
-			printf("%d\n", alive==state?-1:queue[alive]);
-		else
-			printf("error: %s", statement);
+		else if(query[0]=='p')
+			printf("%d\n", front==rear?-1:queue[front++]);
+		else if(query[0]=='s')
+			printf("%d\n", rear-front);
+		else if(query[0]=='e')
+			printf("%d\n", front==rear);
+		else if(query[0]=='b')
+			printf("%d\n", front==rear?-1:queue[rear-1]);
+		else if(query[0]=='f')
+			printf("%d\n", front==rear?-1:queue[front]);
 	}
 
 	return 0;
