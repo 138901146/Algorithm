@@ -3,7 +3,7 @@
 
 int compare(const void *x,const void *y)
 {
-	return *(int *)x>*(int *)y?1:*(int *)x==*(int *)y?0:-1;
+	return *(int *)x>*(int *)y?1:-1;
 }
 
 int main(void)
@@ -19,11 +19,11 @@ int main(void)
 	AB=(int *)malloc(n*n*sizeof(int));
 	CD=(int *)malloc(n*n*sizeof(int));
 
-	for(int i=0;i<n;i++)
+	for(int i=0;i<n;++i)
 		scanf("%d%d%d%d", &A[i], &B[i], &C[i], &D[i]);
 
-	for(int i=0;i<n;i++)
-		for(int j=0;j<n;j++)
+	for(int i=0;i<n;++i)
+		for(int j=0;j<n;++j)
 		{
 			AB[i*n+j]=A[i]+B[j];
 			CD[i*n+j]=C[i]+D[j];
@@ -31,18 +31,18 @@ int main(void)
 
 	qsort((void *)CD,(size_t)n*n,sizeof(int),compare);
 
-	for(int i=0;i<n*n;i++)
+	for(int i=0;i<n*n;++i)
 	{
-		int left=0, right=n*n-1, mid=(left+right)/2;
+		int left=0, right=n*n-1, mid=left+right>>1;
 
 		while(left<right)
 		{
-			if(AB[i]+CD[mid]==0)
+			if(!(AB[i]+CD[mid]))
 			{
 				while(left<n*n && AB[i]+CD[left]<0)
-					left++;
+					++left;
 				while(right>=0 && AB[i]+CD[right]>0)
-					right--;
+					--right;
 				sum+=right-left;
 				break;
 			}
@@ -50,14 +50,15 @@ int main(void)
 				right=mid-1;
 			else
 				left=mid+1;
-			mid=(left+right)/2;
+
+			mid=left+right>>1;
 		}
 
-		if(AB[i]+CD[mid]==0)
-			sum++;
+		if(!(AB[i]+CD[mid]))
+			++sum;
 	}
 
-	printf("%lld\n", sum);
+	printf("%lld", sum);
 	free(AB);
 	free(CD);
 	free(A);
