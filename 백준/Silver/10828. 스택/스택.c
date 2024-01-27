@@ -1,38 +1,38 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
 
 int main(void)
 {
-	int state=0, *stack=NULL, N;
+	int N, stack[10000], top=0;
 
 	scanf("%d", &N);
-	stack=(int *)malloc(N*sizeof(int));
-	while(getchar()!='\n');
+	getchar();
 
-	for(int i=0;i<N;i++)
+	while(N--)
 	{
-		char statement[15]={'\0', };
-		fgets(statement,sizeof(statement),stdin);
+		char query[15]={'\0'};
+		fgets(query,sizeof(query),stdin);
 
-		if(strncmp(statement,"push",4)==0)
+		switch(query[0])
 		{
-			int num=0;
-			for(int j=5;statement[j]!='\0';j++)
-				statement[j-5]=statement[j];
-			num=atoi(statement);
-			stack[state++]=num;
+			case 's':
+				printf("%d\n", top);
+				break;
+			case 'e':
+				printf("%d\n", !top);
+				break;
+			case 't':
+				printf("%d\n", top?stack[top-1]:-1);
+				break;
+			default:
+				if(query[1]=='u')
+				{
+					int num;
+					sscanf(query+4, "%d", &num);
+					stack[top++]=num;
+				}
+				else
+					printf("%d\n", top?stack[--top]:-1);
 		}
-		else if(strncmp(statement,"pop",3)==0)
-			printf("%d\n", state==0?-1:stack[--state]);
-		else if(strncmp(statement,"size",4)==0)
-			printf("%d\n", state);
-		else if(strncmp(statement,"empty",5)==0)
-			printf("%d\n", state==0);
-		else if(strncmp(statement,"top",3)==0)
-			printf("%d\n", state==0?-1:stack[state-1]);
-		else
-			printf("error: %s", statement);
 	}
 
 	return 0;
