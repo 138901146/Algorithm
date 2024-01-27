@@ -7,15 +7,15 @@ int main(void)
 	scanf("%d", &N);
 
 	if(N<3)
-		printf("%d\n", N);
+		printf("%d", N);
 	else
 	{
 		int index=0;
 
 		while((1<<++index)<N);
-		N-=(1<<index-1);
+		N-=1<<index-1;
 
-		printf("%d\n", N<<1);
+		printf("%d", N<<1);
 	}
 
 	return 0;
