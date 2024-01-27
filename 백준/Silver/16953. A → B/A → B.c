@@ -8,15 +8,15 @@ int main(void)
 
 	while(A<B)
 	{
-		if(B%2==0)
-			B/=2;
+		if(!(B&1))
+			B>>=1;
 		else if(B%10==1)
 			B/=10;
 		else
 			break;
-		count++;
+		++count;
 	}
 
-	printf("%d\n", A==B?count+1:-1);
+	printf("%d", A==B?count+1:-1);
 	return 0;
 }
