@@ -1,23 +1,22 @@
 #include<stdio.h>
 
-int abs(int N)
-{
-	return N>=0?N:-N;
-}
-
 int main(void)
 {
-	int score[10], near=0, sum=0;
+	int mushroom, sum=0;
 
-	for(int i=0;i<10;i++)
+	for(int i=0;i<10;++i)
 	{
-		scanf("%d", &score[i]);
+		scanf("%d", &mushroom);
 
-		sum+=score[i];
-		near=abs(sum-100)<=abs(near-100)?sum:near;
+		if(100<=sum+mushroom)
+		{
+			sum=sum+mushroom-100<=100-sum?sum+mushroom:sum;
+			break;
+		}
+
+		sum+=mushroom;
 	}
 
-	printf("%d\n", near);
-
+	printf("%d", sum);
 	return 0;
 }
