@@ -1,12 +1,14 @@
 #include<stdio.h>
-
-int N, M, prefix_sum[1000001], i, j;
+#include<malloc.h>
 
 int main(void)
 {
-	scanf("%d%d", &N, &M);
+	int N, M, *prefix_sum=NULL, i, j;
 
+	scanf("%d%d", &N, &M);
+	prefix_sum=(int *)malloc((N+1)*sizeof(int));
 	prefix_sum[0]=0;
+
 	for(int n=1;n<=N;++n)
 	{
 		scanf("%d", &prefix_sum[n]);
@@ -19,5 +21,6 @@ int main(void)
 		printf("%d\n", prefix_sum[j]-prefix_sum[i-1]);
 	}
 
+	free(prefix_sum);
 	return 0;
 }
