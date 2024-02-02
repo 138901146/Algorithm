@@ -1,25 +1,23 @@
 #include<stdio.h>
-#include<malloc.h>
+
+int N, M, prefix_sum[1000001], i, j;
 
 int main(void)
 {
-	int N, M, *sum=0, i, j;
-
 	scanf("%d%d", &N, &M);
-	sum=(int *)calloc(N+1,sizeof(int));
 
-	for(int n=1;n<=N;n++)
+	prefix_sum[0]=0;
+	for(int n=1;n<=N;++n)
 	{
-		scanf("%d", &sum[n]);
-		sum[n]+=sum[n-1];
+		scanf("%d", &prefix_sum[n]);
+		prefix_sum[n]+=prefix_sum[n-1];
 	}
 
-	for(int m=0;m<M;m++)
+	while(M--)
 	{
 		scanf("%d%d", &i, &j);
-		printf("%d\n", sum[j]-sum[i-1]);
+		printf("%d\n", prefix_sum[j]-prefix_sum[i-1]);
 	}
 
-	free(sum);
 	return 0;
 }
