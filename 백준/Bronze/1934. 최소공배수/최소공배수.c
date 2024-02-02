@@ -11,14 +11,6 @@ int main(void)
 		scanf("%d%d", &A, &B);
 
 		lcm=A*B;
-
-		if(A<B)
-		{
-			int temp=A;
-			A=B;
-			B=temp;
-		}
-
 		while(B)
 		{
 			int temp=A%B;
