@@ -3,32 +3,30 @@
 
 int main(void)
 {
-	int N, M, **prefix_sum=NULL, x1, x2, y1, y2;
+	int N, M, **sum=NULL, x1, y1, x2, y2;
 
 	scanf("%d%d", &N, &M);
-	prefix_sum=(int **)malloc((N+1)*sizeof(int *));
+	sum=(int **)malloc((N+1)*sizeof(int *));
 
-	prefix_sum[0]=(int *)calloc(N+1,sizeof(int));
-	for(int r=1;r<=N;++r)
+	sum[0]=(int *)calloc(N+1,sizeof(int));
+	for(int i=1;i<=N;i++)
 	{
-		prefix_sum[r]=(int *)malloc((N+1)*sizeof(int));
-		prefix_sum[r][0]=0;
-
-		for(int c=1;c<=N;++c)
+		sum[i]=(int *)calloc(N+1,sizeof(int));
+		for(int j=1;j<=N;j++)
 		{
-			scanf("%d", &prefix_sum[r][c]);
-			prefix_sum[r][c]+=prefix_sum[r-1][c]+prefix_sum[r][c-1]-prefix_sum[r-1][c-1];
+			scanf("%d", &sum[i][j]);
+			sum[i][j]=sum[i][j]+sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1];
 		}
 	}
 
-	while(M--)
+	for(int m=0;m<M;m++)
 	{
 		scanf("%d%d%d%d", &x1, &y1, &x2, &y2);
-		printf("%d\n", prefix_sum[x2][y2]-prefix_sum[x1-1][y2]-prefix_sum[x2][y1-1]+prefix_sum[x1-1][y1-1]);
+		printf("%d\n", sum[x2][y2]-sum[x2][y1-1]-sum[x1-1][y2]+sum[x1-1][y1-1]);
 	}
 
-	for(int n=0;n<=N;++n)
-		free(prefix_sum[n]);
-	free(prefix_sum);
+	for(int n=0;n<=N;n++)
+		free(sum[n]);
+	free(sum);
 	return 0;
 }
