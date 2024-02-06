@@ -1,22 +1,17 @@
 #include<stdio.h>
-#include<malloc.h>
+
+int N, M, K, board[2001][2001]={0}, min=100000000;
+char str[2001]={'\0'};
 
 int main(void)
 {
-	int N, M, K, **board=NULL, min=100000000;
-	char *str=NULL;
 
 	scanf("%d%d%d", &N, &M, &K);
-	board=(int **)malloc((N+1)*sizeof(int *));
-	str=(char *)calloc(M+1,sizeof(char));
-
-	board[0]=(int *)calloc(M+1,sizeof(int));
 
 	getchar();
 	for(int n=1;n<=N;++n)
 	{
 		scanf("%s", str);
-		board[n]=(int *)calloc(M+1,sizeof(int));
 
 		for(int m=1;m<=M;++m)
 		{
@@ -32,9 +27,5 @@ int main(void)
 	}
 
 	printf("%d", min);
-	for(int n=0;n<=N;++n)
-		free(board[n]);
-	free(board);
-	free(str);
 	return 0;
 }
