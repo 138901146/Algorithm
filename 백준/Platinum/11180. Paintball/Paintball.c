@@ -2,12 +2,6 @@
 #include<stdbool.h>
 #include<malloc.h>
 
-typedef struct
-{
-	int A, B;
-}
-visible;
-
 int *shot=NULL, **player=NULL, *player_count=NULL;
 bool *visited=NULL;
 
@@ -30,19 +24,19 @@ bool dfs(int current)
 
 int main(void)
 {
-	int N, M, count=0;
-	visible *relation=NULL;
+	int N, M, A, B, *relation=NULL, count=0;
 
 	scanf("%d%d", &N, &M);
 	player=(int **)malloc((N+1)*sizeof(int *));
 	player_count=(int *)calloc(N+1,sizeof(int));
-	relation=(visible *)malloc(M*sizeof(visible));
+	relation=(int *)malloc(M*sizeof(int));
 
 	for(int m=0;m<M;++m)
 	{
-		scanf("%d%d", &relation[m].A, &relation[m].B);
-		++player_count[relation[m].A];
-		++player_count[relation[m].B];
+		scanf("%d%d", &A, &B);
+		++player_count[A];
+		++player_count[B];
+		relation[m]=A<<10|B;
 	}
 
 	for(int n=1;n<=N;++n)
@@ -53,8 +47,10 @@ int main(void)
 
 	for(int m=0;m<M;++m)
 	{
-		player[relation[m].A][player_count[relation[m].A]++]=relation[m].B;
-		player[relation[m].B][player_count[relation[m].B]++]=relation[m].A;
+		A=relation[m]>>10;
+		B=relation[m]&1023;
+		player[A][player_count[A]++]=B;
+		player[B][player_count[B]++]=A;
 	}
 	free(relation);
 
