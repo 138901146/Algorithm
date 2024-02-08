@@ -12,7 +12,7 @@ int main(void)
 	while(--M)
 	{
 		scanf("%d", &x[current]);
-		gap=gap<(x[current]-x[previous]+1>>1)?x[current]-x[previous]+1>>1:gap;
+		gap=gap<x[current]-x[previous]+1>>1?x[current]-x[previous]+1>>1:gap;
 		current^=1;
 		previous^=1;
 	}
