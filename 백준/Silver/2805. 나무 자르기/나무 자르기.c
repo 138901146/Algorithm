@@ -3,37 +3,34 @@
 
 int main(void)
 {
-	int N, M, *tree=NULL, left=0, right=0, mid, ans;
-	long long sum;
+	int N, M, left=0, right=1000000000, mid, ans=0, *tree=NULL;
 
 	scanf("%d%d", &N, &M);
 	tree=(int *)malloc(N*sizeof(int));
 
-	for(int n=0;n<N;n++)
-	{
+	for(int n=0;n<N;++n)
 		scanf("%d", &tree[n]);
-		right=tree[n]>right?tree[n]:right;
-	}
 
 	while(left<=right)
 	{
-		sum=0;
-		mid=(left+right)>>1;
+		long long sum=0;
 
-		for(int n=0;n<N;n++)
-			if(tree[n]>mid)
+		mid=left+right>>1;
+
+		for(int n=0;n<N;++n)
+			if(mid<tree[n])
 				sum+=tree[n]-mid;
 
-		if(sum<M)
-			right=mid-1;
-		else
+		if(M<=sum)
 		{
 			ans=mid;
 			left=mid+1;
 		}
+		else
+			right=mid-1;
 	}
 
-	printf("%d\n", ans);
+	printf("%d", ans);
 	free(tree);
 	return 0;
 }
