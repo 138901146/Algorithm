@@ -1,15 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<stdbool.h>
 
 int compare(const void *x,const void *y)
 {
-	return *(int *)x>*(int *)y?1:-1;
+	return *(int *)x<*(int *)y?-1:1;
 }
 
 int main(void)
 {
-	int N, M, *A=NULL, target;
+	int N, *A=NULL, M, number;
 
 	scanf("%d", &N);
 	A=(int *)malloc(N*sizeof(int));
@@ -22,27 +21,25 @@ int main(void)
 
 	while(M--)
 	{
-		scanf("%d", &target);
-
 		int left=0, right=N-1, mid;
-		bool found=false;
 
-		while(left<=right)
+		scanf("%d", &number);
+
+		while(left<right)
 		{
 			mid=left+right>>1;
 
-			if(A[mid]==target)
-			{
-				found=true;
-				break;
-			}
-			else if(A[mid]<target)
+			if(A[mid]<number)
 				left=mid+1;
-			else
+			else if(number<A[mid])
 				right=mid-1;
+			else
+				break;
 		}
+		right=right<0?0:right;
+		mid=left+right>>1;
 
-		printf("%d\n", found);
+		printf("%d\n", A[mid]==number);
 	}
 
 	free(A);
