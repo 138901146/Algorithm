@@ -2,29 +2,30 @@
 
 int main(void)
 {
-	long int X, Y, Z, count=0, left=0, right=1000000000;
+	long long X, Y, Z, left=0, right=1000000000, mid;
 
-	scanf("%ld %ld", &X, &Y);
+	scanf("%lld%lld", &X, &Y);
 
-	Z=(Y*100)/X;
-	if(Z>=99)
-		count=-1;
-	else
+	Z=Y*100/X;
+
+	if(98<Z)
 	{
-		while(left<right-1)
-		{
-			count=(left+right)/2;
-
-			if(((Y+count)*100)/(X+count)==Z)
-				left=count;
-			else
-				right=count;
-		}
-
-		if(((Y+count)*100)/(X+count)==Z)
-			count++;
+		printf("-1");
+		return 0;
 	}
 
-	printf("%ld\n", count);
+	while(left<right)
+	{
+		mid=left+right>>1;
+
+		if((Y+mid)*100/(X+mid)==Z)
+			left=mid+1;
+		else
+			right=mid-1;
+	}
+	mid=left+right>>1;
+	mid+=(Y+mid)*100/(X+mid)==Z;
+
+	printf("%lld", mid);
 	return 0;
 }
