@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include<malloc.h>
 #include<string.h>
 
 char a_first[21]={'\0'}, b_first[21]={'\0'};
@@ -42,12 +41,9 @@ int compare(char *a,char *b)
 int main(void)
 {
 	int N, K, num, max=0;
-	char **list=NULL;
+	char list[50][11]={'\0'};
 
 	scanf("%d%d", &K, &N);
-	list=(char **)malloc(N*sizeof(char *));
-	for(int n=0;n<N;++n)
-		list[n]=(char *)calloc(11,sizeof(char));
 
 	for(int k=0;k<K;++k)
 	{
@@ -69,10 +65,6 @@ int main(void)
 			}
 
 	for(int n=0;n<N;++n)
-	{
 		printf("%s", list[n]);
-		free(list[n]);
-	}
-	free(list);
 	return 0;
 }
