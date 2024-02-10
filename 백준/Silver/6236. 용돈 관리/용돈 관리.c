@@ -21,15 +21,10 @@ int main(void)
 		for(int n=0;n<N;++n)
 			if(pocket_money[n]<=current)
 				current-=pocket_money[n];
-			else if(pocket_money[n]%mid)
-			{
-				current=mid-pocket_money[n]%mid;
-				count+=pocket_money[n]/mid+1;
-			}
 			else
 			{
-				current=0;
-				count+=pocket_money[n]/mid;
+				current=mid-pocket_money[n]%mid;
+				count+=pocket_money[n]/mid+1-!(pocket_money[n]%mid);
 			}
 
 		if(count<=M)
