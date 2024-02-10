@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	int N, M, left=1, right=1000000000, K=1, *pocket_money=NULL, max=0;
+	int N, M, left=0, right=1000000000, K=1, *pocket_money=NULL;
 
 	scanf("%d%d", &N, &M);
 	pocket_money=(int *)malloc(N*sizeof(int));
@@ -11,7 +11,7 @@ int main(void)
 	for(int n=0;n<N;++n)
 	{
 		scanf("%d", &pocket_money[n]);
-		max=max<pocket_money[n]?pocket_money[n]:max;
+		left=left<pocket_money[n]?pocket_money[n]:left;
 	}
 
 	while(left<=right)
@@ -41,7 +41,7 @@ int main(void)
 			left=mid+1;
 	}
 
-	printf("%d", K<max?max:K);
+	printf("%d", K);
 	free(pocket_money);
 	return 0;
 }
