@@ -1,5 +1,7 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
+
+#define INF 1000000001
 
 int abs(int x)
 {
@@ -8,33 +10,50 @@ int abs(int x)
 
 int main(void)
 {
-	int N, *liquid=NULL, neutrality[2]={2100000000,0}, left=0, right;
+	int N, *liquid=NULL, left=0, right, best_sum=INF<<1, best[2];
 
 	scanf("%d", &N);
 	liquid=(int *)malloc(N*sizeof(int));
 
-	for(int n=0;n<N;n++)
+	for(int n=0;n<N;++n)
 		scanf("%d", &liquid[n]);
 
 	right=N-1;
-
 	while(left<right)
 	{
-		if(abs(liquid[left]+liquid[right])<abs(neutrality[0]+neutrality[1]))
-		{
-			neutrality[0]=liquid[left];
-			neutrality[1]=liquid[right];
-		}
+		int sum=liquid[left]+liquid[right];
 
-		if(liquid[left]+liquid[right]==0)
-			break;
-		else if(liquid[left]+liquid[right]<0)
-			left++;
+		if(!sum)
+		{
+			printf("%d %d", liquid[left], liquid[right]);
+			free(liquid);
+			return 0;
+		}
+		else if(sum<0)
+		{
+			if(-sum<abs(best_sum))
+			{
+				best_sum=sum;
+				best[0]=liquid[left];
+				best[1]=liquid[right];
+			}
+
+			++left;
+		}
 		else
-			right--;
+		{
+			if(sum<abs(best_sum))
+			{
+				best_sum=sum;
+				best[0]=liquid[left];
+				best[1]=liquid[right];
+			}
+
+			--right;
+		}
 	}
 
-	printf("%d %d\n", neutrality[0], neutrality[1]);
+	printf("%d %d", best[0], best[1]);
 	free(liquid);
 	return 0;
 }
