@@ -116,10 +116,7 @@ int main(void)
 	}
 
 	for(int m=0;m<M;++m)
-	{
-		adjacent_list[route[m].a][count[route[m].a]++]=m;
-		adjacent_list[route[m].b][count[route[m].b]++]=m;
-	}
+		adjacent_list[route[m].a][count[route[m].a]++]=adjacent_list[route[m].b][count[route[m].b]++]=m;
 
 	min[1].time=0;
 	add(min[1]);
