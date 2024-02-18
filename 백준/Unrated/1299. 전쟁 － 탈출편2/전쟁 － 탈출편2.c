@@ -6,14 +6,14 @@
 
 typedef struct
 {
-	unsigned int a, b, c;
+	int a, b, c;
 	bool blocked;
 }
 edge;
 
 typedef struct
 {
-	unsigned int country, time;
+	int country, time;
 }
 node;
 
@@ -77,7 +77,7 @@ int main(void)
 
 	for(int m=0;m<M;++m)
 	{
-		scanf("%u%u%u", &route[m].a, &route[m].b, &route[m].c);
+		scanf("%d%d%d", &route[m].a, &route[m].b, &route[m].c);
 		++count[route[m].a];
 		++count[route[m].b];
 		route[m].blocked=false;
@@ -152,7 +152,7 @@ int main(void)
 		}
 	}
 
-	printf("%u", min[N].time);
+	printf("%d", min[N].time);
 	for(int n=1;n<=N;++n)
 		free(adjacent_list[n]);
 	free(route);
