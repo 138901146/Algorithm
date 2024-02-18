@@ -2,7 +2,7 @@
 #include<malloc.h>
 #include<stdbool.h>
 
-#define INF 1000000000
+#define INF 2147483647
 
 typedef struct
 {
@@ -17,15 +17,19 @@ typedef struct
 }
 node;
 
-int size=1;
-node pq[1000001];
+int size=1, *pq_index=NULL;
+node *pq=NULL;
 
 node get(void)
 {
 	int index=1;
 
 	pq[0]=pq[1];
+	pq_index[pq[1].country]=size-1;
+
 	pq[1]=pq[--size];
+	pq[size]=pq[0];
+	pq_index[pq[1].country]=1;
 
 	while(index<size)
 	{
@@ -34,9 +38,12 @@ node get(void)
 		if(pq[index].time<=pq[next].time)
 			break;
 
-		node temp=pq[index];
+		int swap_index=pq_index[pq[index].country];
+		pq_index[pq[index].country]=pq_index[pq[next].country];
+		pq_index[pq[next].country]=swap_index;
+		node swap_node=pq[index];
 		pq[index]=pq[next];
-		pq[next]=temp;
+		pq[next]=swap_node;
 		index=next;
 	}
 
@@ -45,19 +52,34 @@ node get(void)
 
 void add(node value)
 {
-	int index=size;
-	pq[size++]=value;
+	int index=pq_index[value.country];
 
-	while(1<index)
+	pq[index]=value;
+
+	if(index>=size)
+	{
+		int swap_index=pq[size].country;
+		pq_index[pq[size].country]=index;
+		pq_index[value.country]=size;
+		node swap_node=pq[index];
+		pq[index]=pq[size];
+		pq[size]=swap_node;
+		index=size++;
+	}
+
+	while(index>1)
 	{
 		int next=index>>1;
 
 		if(pq[next].time<=pq[index].time)
 			break;
 
-		node temp=pq[index];
+		int swap_index=pq_index[pq[index].country];
+		pq_index[pq[index].country]=pq_index[pq[next].country];
+		pq_index[pq[next].country]=swap_index;
+		node swap_node=pq[index];
 		pq[index]=pq[next];
-		pq[next]=temp;
+		pq[next]=swap_node;
 		index=next;
 	}
 }
@@ -74,6 +96,8 @@ int main(void)
 	count=(int *)calloc(N+1,sizeof(int));
 	min=(node *)malloc((N+1)*sizeof(node));
 	previous=(int *)malloc((N+1)*sizeof(int));
+	pq=(node *)malloc((N+1)*sizeof(node));
+	pq_index=(int *)malloc((N+1)*sizeof(int));
 
 	for(int m=0;m<M;++m)
 	{
@@ -87,8 +111,8 @@ int main(void)
 	{
 		adjacent_list[n]=(int *)malloc(count[n]*sizeof(int));
 		count[n]=0;
-		min[n].country=n;
-		min[n].time=INF;
+		pq[n].country=pq_index[n]=min[n].country=n;
+		pq[n].time=min[n].time=INF;
 	}
 
 	for(int m=0;m<M;++m)
@@ -160,5 +184,7 @@ int main(void)
 	free(count);
 	free(min);
 	free(previous);
+	free(pq);
+	free(pq_index);
 	return 0;
 }
