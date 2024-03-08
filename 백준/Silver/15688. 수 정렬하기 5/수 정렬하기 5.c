@@ -1,26 +1,23 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-int compare(const void *x,const void *y)
-{
-	return *(int *)x>*(int *)y?1:*(int *)x==*(int *)y?0:-1;
-}
+int arr[2000001]={0};
 
 int main(void)
 {
-	int N, *arr=NULL;
+	int N, A;
 
 	scanf("%d", &N);
-	arr=(int *)malloc(N*sizeof(int));
 
-	for(int i=0;i<N;i++)
-		scanf("%d", &arr[i]);
+	while(N--)
+	{
+		scanf("%d", &A);
+		++arr[A+1000000];
+	}
 
-	qsort((void *)arr,(size_t)N,sizeof(int),compare);
+	A=-1000000;
+	for(int i=0;i<2000001;++i,++A)
+		for(int j=0;j<arr[i];++j)
+			printf("%d\n", A);
 
-	for(int i=0;i<N;i++)
-		printf("%d\n", arr[i]);
-
-	free(arr);
 	return 0;
 }
