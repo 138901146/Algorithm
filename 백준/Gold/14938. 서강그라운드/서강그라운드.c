@@ -1,18 +1,14 @@
 #include<stdio.h>
-#include<malloc.h>
 
 int main(void)
 {
-	int n, m, r, *t=NULL, max=0, **distance=NULL, a, b, l;
+	int n, m, r, t[101], max=0, distance[101][101], a, b, l;
 
 	scanf("%d%d%d", &n, &m, &r);
-	t=(int *)malloc((n+1)*sizeof(int));
-	distance=(int **)malloc((n+1)*sizeof(int *));
 
 	for(int i=1;i<=n;++i)
 	{
 		scanf("%d", &t[i]);
-		distance[i]=(int *)malloc((n+1)*sizeof(int));
 		for(int j=1;j<=n;++j)
 			distance[i][j]=10000000;
 		distance[i][i]=0;
@@ -39,11 +35,8 @@ int main(void)
 				sum+=t[j];
 
 		max=max<sum?sum:max;
-		free(distance[i]);
 	}
 
 	printf("%d", max);
-	free(distance);
-	free(t);
 	return 0;
 }
