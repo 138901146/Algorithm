@@ -36,7 +36,7 @@ void update(int *tree,int node,int start,int end,int index)
 	{
 		update(tree,node<<1,start,start+end>>1,index);
 		update(tree,node<<1|1,(start+end>>1)+1,end,index);
-		tree[node]=tree[node<<1]+tree[node<<1|1];
+		--tree[node];
 	}
 }
 
