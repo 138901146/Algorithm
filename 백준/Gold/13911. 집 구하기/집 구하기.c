@@ -96,7 +96,7 @@ int main(void)
 	type=(int *)calloc(V+1,sizeof(int));
 	mcdonald=(node *)malloc((V+1)*sizeof(node));
 	starbucks=(node *)malloc((V+1)*sizeof(node));
-	pq=(node *)malloc(300*V*sizeof(node));
+	pq=(node *)malloc(50*V*sizeof(node));
 
 	scanf("%d%d", &M, &x);
 	while(M--)
