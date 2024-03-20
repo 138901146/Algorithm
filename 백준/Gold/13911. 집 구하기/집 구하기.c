@@ -96,7 +96,7 @@ int main(void)
 	type=(int *)calloc(V+1,sizeof(int));
 	mcdonald=(node *)malloc((V+1)*sizeof(node));
 	starbucks=(node *)malloc((V+1)*sizeof(node));
-	pq=(node *)malloc(50*V*sizeof(node));
+	pq=(node *)malloc(25*V*sizeof(node));
 
 	scanf("%d%d", &M, &x);
 	while(M--)
@@ -122,8 +122,6 @@ int main(void)
 			mcdonald[v].distance=0;
 			pq[size++]=mcdonald[v];
 		}
-		if(type[v]&2)
-			starbucks[v].distance=0;
 	}
 
 	while(1<size)
@@ -148,7 +146,10 @@ int main(void)
 	size=1;
 	for(int v=1;v<=V;++v)
 		if(type[v]&2)
+		{
+			starbucks[v].distance=0;
 			pq[size++]=starbucks[v];
+		}
 
 	while(1<size)
 	{
