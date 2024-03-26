@@ -1,27 +1,32 @@
 #include<stdio.h>
 #include<malloc.h>
 
+#define INF 2000000
+
 int main(void)
 {
-	int N, K, doll, *lion=NULL, size=0, min=10000000;
+	int N, K, *doll=NULL, min=INF, rear=1;
 
 	scanf("%d%d", &N, &K);
-	lion=(int *)malloc(N*sizeof(int));
+	doll=(int *)malloc((N+1)*sizeof(int));
+	doll[0]=0;
 
-	for(int n=0;n<N;n++)
+	for(int n=1;n<=N;++n)
 	{
-		scanf("%d", &doll);
-
-		if(doll==1)
-		{
-			lion[size++]=n;
-
-			if(size>=K)
-				min=n-lion[size-K]<min?n-lion[size-K]:min;
-		}
+		scanf("%d", &doll[n]);
+		doll[n]=doll[n-1]+(doll[n]==1);
 	}
 
-	printf("%d\n", min!=10000000?min+1:-1);
-	free(lion);
+	for(int front=0;front<=N && rear<=N;++front)
+	{
+		while(rear<=N && doll[rear]-doll[front]<K)
+			++rear;
+
+		if(K<=doll[rear]-doll[front])
+			min=rear-front<min?rear-front:min;
+	}
+
+	printf("%d", min==INF?-1:min);
+	free(doll);
 	return 0;
 }
