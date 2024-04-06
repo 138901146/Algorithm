@@ -6,7 +6,7 @@ int main(void)
 {
 	int count=0;
 
-	scanf("%s", str);
+	gets(str);
 
 	while(str[0]==str[++count]);
 
