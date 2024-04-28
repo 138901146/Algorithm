@@ -1,17 +1,15 @@
 #include<stdio.h>
-#include<stdbool.h>
 
 int main(void)
 {
-	int N, max[101][101]={0}, start, end;
-	bool connected[101][101]={false};
+	int N, max[101][101]={0}, connected[101][101]={0}, start, end;
 
 	scanf("%d", &N);
 
 	while(N--)
 	{
 		scanf("%d%d", &start, &end);
-		connected[start][end]=connected[end][start]=true;
+		connected[start][end]=connected[end][start]=1;
 	}
 
 	for(int i=1;i<101;++i)
