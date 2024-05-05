@@ -1,52 +1,43 @@
 #include<stdio.h>
 
-int arr[8], N, M, NM[8];
+int N, M, arr[8], selected[8];
 
-void N_M(int x)
+void N_M(int current,int flag)
 {
-	if(x==M)
+	if(current==M)
 	{
-		for(int i=0;i<M;i++)
-			printf("%d ", NM[i]);
+		for(int i=0;i<M;++i)
+			printf("%d ", arr[selected[i]]);
 		printf("\n");
 		return;
 	}
 
-	for(int i=0;i<N;i++)
-	{
-		int count=0;
-
-		for(int j=0;j<x;j++)
-			if(NM[j]==arr[i])
-			{
-				count++;
-				break;
-			}
-
-		if(count==0)
+	for(int i=0;i<N;++i)
+		if(!(flag&(1<<i)))
 		{
-			NM[x]=arr[i];
-			N_M(x+1);
+			selected[current]=i;
+			N_M(current+1,1<<i|flag);
 		}
-	}
 }
 
 int main(void)
 {
 	scanf("%d%d", &N, &M);
 
-	for(int i=0;i<N;i++)
+	for(int i=0;i<N;++i)
+	{
 		scanf("%d", &arr[i]);
 
-	for(int i=0;i<N;i++)
-		for(int j=i+1;j<N;j++)
-			if(arr[i]>arr[j])
+		for(int j=0;j<i;++j)
+			if(arr[i]<arr[j])
 			{
 				int temp=arr[i];
 				arr[i]=arr[j];
 				arr[j]=temp;
 			}
+	}
 
-	N_M(0);
+	N_M(0,0);
+
 	return 0;
 }
