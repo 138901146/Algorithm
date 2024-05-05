@@ -1,40 +1,30 @@
 #include<stdio.h>
 
-int arr[8], N, M;
+int N, M, arr[8];
 
-void N_M(int x)
+void N_M(int current,int flag)
 {
-	if(x==M)
+	if(current==M)
 	{
-		for(int i=0;i<M;i++)
+		for(int i=0;i<M;++i)
 			printf("%d ", arr[i]);
 		printf("\n");
 		return;
 	}
 
-	for(int i=1;i<=N;i++)
-	{
-		int count=0;
-
-		for(int j=0;j<x;j++)
-			if(arr[j]==i)
-			{
-				count++;
-				break;
-			}
-
-		if(count==0)
+	for(int i=1;i<=N;++i)
+		if(!(flag&(1<<i)))
 		{
-			arr[x]=i;
-			N_M(x+1);
+			arr[current]=i;
+			N_M(current+1,1<<i|flag);
 		}
-	}
 }
 
 int main(void)
 {
 	scanf("%d%d", &N, &M);
 
-	N_M(0);
+	N_M(0,0);
+
 	return 0;
 }
