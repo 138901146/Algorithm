@@ -2,7 +2,7 @@
 
 int main(void)
 {
-	int N, M, a, b, k, H[100002]={0}, soil[100002]={0};
+	int N, M, a, b, k, H[100002], soil[100002]={0};
 
 	scanf("%d%d", &N, &M);
 
