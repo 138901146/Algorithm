@@ -2,8 +2,8 @@
 #include<string.h>
 #include<stdbool.h>
 
-bool visited[1000]={false};
-int adjacent_list[1000][106], adjacent_list_size[1000]={0}, occupied[1000];
+bool visited[500]={false};
+int adjacent_list[500][106], adjacent_list_size[500]={0}, occupied[500];
 
 bool dfs(int current)
 {
@@ -29,7 +29,7 @@ bool dfs(int current)
 int main(void)
 {
 	int R, C, village_size=0, id[51][51]={0}, location_size=1, location[2500];
-	char map[52][52]={0}, village[1000][51]={0};
+	char map[52][52]={0}, village[500][51]={0};
 
 	scanf("%d%d", &R, &C);
 	for(int r=1;r<=R;++r)
