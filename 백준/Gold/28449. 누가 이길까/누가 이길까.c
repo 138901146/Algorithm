@@ -9,7 +9,7 @@ int compare(const void *x,const void *y)
 int main(void)
 {
 	int N, M, *a=NULL, *b=NULL;
-	long long HI=0, ARC=0, draw=0;
+	long long HI=0, ARC=0, draw=0, arc=0, previous[2];
 
 	scanf("%d%d", &N, &M);
 	a=(int *)malloc(N*sizeof(int));
@@ -25,43 +25,29 @@ int main(void)
 
 	for(int hi=0;hi<N;++hi)
 	{
-		int left=0, right=M-1, mid, point=0, win, lose;
-
-		while(left<=right)
+		if(hi && a[hi]==a[hi-1])
 		{
-			mid=left+right>>1;
-
-			if(b[mid]<a[hi])
-			{
-				left=mid+1;
-				point=mid;
-			}
-			else
-				right=mid-1;
+			HI+=previous[0];
+			draw+=previous[1];
+			ARC+=M-arc;
+			continue;
 		}
 
-		win=point+(b[point]<a[hi]);
-		left=0;
-		right=point=M-1;
+		while(arc<M && b[arc]<a[hi])
+			++arc;
 
-		while(left<=right)
+		HI+=arc;
+		previous[0]=arc;
+
+		previous[1]=0;
+		while(arc<M && a[hi]==b[arc])
 		{
-			mid=left+right>>1;
-
-			if(a[hi]<b[mid])
-			{
-				right=mid-1;
-				point=mid;
-			}
-			else
-				left=mid+1;
+			++previous[1];
+			++arc;
 		}
+		draw+=previous[1];
 
-		lose=M-point-(b[point]<=a[hi]);
-
-		HI+=win;
-		ARC+=lose;
-		draw+=M-win-lose;
+		ARC+=M-arc;
 	}
 
 	printf("%lld %lld %lld", HI, ARC, draw);
