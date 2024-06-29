@@ -11,15 +11,8 @@ int main(void)
 
 	document_length=strlen(document);
 	word_length=strlen(word);
-
 	document[--document_length]=0;
 	word[--word_length]=0;
-
-	if(!word_length || !document_length)
-	{
-		printf("0");
-		return 0;
-	}
 
 	for(int i=0;i+word_length<=document_length;++i)
 	{
