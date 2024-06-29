@@ -12,10 +12,8 @@ int main(void)
 	document_length=strlen(document);
 	word_length=strlen(word);
 
-	if(document[document_length-1]=='\n')
-		document[--document_length]=0;
-	if(word[word_length-1]=='\n')
-		word[--word_length]=0;
+	document[--document_length]=0;
+	word[--word_length]=0;
 
 	if(!word_length || !document_length)
 	{
