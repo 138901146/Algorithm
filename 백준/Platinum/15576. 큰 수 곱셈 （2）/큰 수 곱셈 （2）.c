@@ -3,7 +3,7 @@
 #include<math.h>
 #include<complex.h>
 
-#define N 2000005
+#define N 1050000
 #define PI 3.14159265358979
 
 int max(int x,int y)
