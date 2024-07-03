@@ -2,17 +2,17 @@
 
 int main(void)
 {
-	unsigned long long int N;
+	unsigned long long N;
 	int K=64;
 
 	scanf("%llu", &N);
 
-	while(N%2==0)
+	while(!(N&1))
 	{
-		N/=2;
-		K--;
+		N>>=1;
+		--K;
 	}
 
-	printf("%d\n", K);
+	printf("%d", K);
 	return 0;
 }
