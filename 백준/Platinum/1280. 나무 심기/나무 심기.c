@@ -21,7 +21,7 @@ void update(long long *tree,int node,int start,int end,int index,long long value
 		return;
 	else if(start==end)
 	{
-		tree[node]=value;
+		tree[node]+=value;
 		return;
 	}
 	else
@@ -49,13 +49,11 @@ int main(void)
 	{
 		scanf("%d", &location);
 
-		long long count=get(total,1,0,200000,location,location)+1;
-
 		cost=(cost*((get(total,1,0,200000,0,location)*location-get(left_sum,1,0,200000,0,location)+get(total,1,0,200000,location,200000)*(200000-location)-get(right_sum,1,0,200000,location,200000))%MOD))%MOD;
 
-		update(left_sum,1,0,200000,location,location*count);
-		update(right_sum,1,0,200000,location,(200000-location)*count);
-		update(total,1,0,200000,location,count);
+		update(left_sum,1,0,200000,location,location);
+		update(right_sum,1,0,200000,location,200000-location);
+		update(total,1,0,200000,location,1);
 	}
 
 	printf("%lld", cost);
