@@ -49,7 +49,7 @@ int main(void)
 	{
 		scanf("%d", &location);
 
-		cost=(cost*((get(total,1,0,200000,0,location)*location-get(left_sum,1,0,200000,0,location)+get(total,1,0,200000,location,200000)*(200000-location)-get(right_sum,1,0,200000,location,200000))%MOD))%MOD;
+		cost=(cost*((get(total,1,0,200000,0,location-1)*location-get(left_sum,1,0,200000,0,location-1)+get(total,1,0,200000,location+1,200000)*(200000-location)-get(right_sum,1,0,200000,location+1,200000))%MOD))%MOD;
 
 		update(left_sum,1,0,200000,location,location);
 		update(right_sum,1,0,200000,location,200000-location);
