@@ -23,16 +23,16 @@ int main(void)
 
 	scanf("%d%d", &n, &m);
 	set=(int *)malloc((n+1)*sizeof(int));
-	for(int i=0;i<=n;i++)
+	for(int i=0;i<=n;++i)
 		set[i]=i;
 
-	for(int i=0;i<m;i++)
+	while(m--)
 	{
 		scanf("%d%d%d", &oper, &a, &b);
-		if(oper==0)
-			union_set(a,b);
-		else
+		if(oper)
 			printf("%s\n", find_set(a)==find_set(b)?"YES":"NO");
+		else
+			union_set(a,b);
 	}
 
 	free(set);
