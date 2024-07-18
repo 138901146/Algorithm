@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
 int *parent=NULL;
 
@@ -18,32 +18,30 @@ void union_set(int x,int y)
 
 int main(void)
 {
-	int G, P, *g=NULL, count=0;
+	int G, P, g, count=0;
 
 	scanf("%d", &G);
 	scanf("%d", &P);
-	g=(int *)malloc(P*sizeof(int));
 	parent=(int *)malloc((G+1)*sizeof(int));
-	for(int i=0;i<=G;i++)
+
+	for(int i=0;i<=G;++i)
 		parent[i]=i;
-	for(int i=0;i<P;i++)
-		scanf("%d", &g[i]);
 
-	for(int i=0;i<P;i++)
+	for(int i=0;i<P;++i)
 	{
-		int p=find_parent(g[i]);
+		scanf("%d", &g);
+		g=find_parent(g);
 
-		if(p!=0)
+		if(g)
 		{
-			union_set(p,p-1);
-			count++;
+			union_set(g,g-1);
+			++count;
 		}
 		else
 			break;
 	}
 
-	printf("%d\n", count);
-	free(g);
+	printf("%d", count);
 	free(parent);
 	return 0;
 }
