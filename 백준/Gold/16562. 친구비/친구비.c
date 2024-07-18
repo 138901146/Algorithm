@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
 int *set=NULL, *A=NULL;
 
@@ -31,26 +31,26 @@ int main(void)
 	scanf("%d%d%d", &N, &M, &k);
 	set=(int *)malloc((N+1)*sizeof(int));
 	A=(int *)malloc((N+1)*sizeof(int));
-	for(int n=1;n<=N;n++)
+
+	for(int n=1;n<=N;++n)
 	{
 		set[n]=n;
 		scanf("%d", &A[n]);
 	}
 
-	for(int m=0;m<M;m++)
+	while(M--)
 	{
 		scanf("%d%d", &v, &w);
 		union_set(v,w);
 	}
 
-	for(int n=1;n<=N;n++)
-		if(set[n]==n)
-			sum+=A[n];
+	for(int n=1;n<=N;++n)
+		sum+=n==set[n]?A[n]:0;
 
 	if(sum<=k)
-		printf("%d\n", sum);
+		printf("%d", sum);
 	else
-		printf("Oh no\n");
+		printf("Oh no");
 	free(A);
 	free(set);
 	return 0;
