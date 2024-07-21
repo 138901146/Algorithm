@@ -4,9 +4,7 @@ int parent[1001];
 
 int find_parent(int v)
 {
-	if(v==parent[v])
-		return v;
-	return parent[v]=find_parent(parent[v]);
+	return v==parent[v]?v:(parent[v]=find_parent(parent[v]));
 }
 
 void union_parent(int u,int v)
