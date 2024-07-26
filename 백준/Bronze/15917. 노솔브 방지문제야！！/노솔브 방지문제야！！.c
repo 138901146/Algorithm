@@ -2,24 +2,14 @@
 
 int main(void)
 {
-	int Q;
-	long long a;
+	int Q, a;
 
 	scanf("%d", &Q);
 
 	while(Q--)
 	{
-		scanf("%lld", &a);
-
-		while(a)
-		{
-			if(a&1)
-				break;
-
-			a>>=1;
-		}
-
-		printf("%d\n", a==1);
+		scanf("%d", &a);
+		printf("%d\n", (a&-a)==a);
 	}
 
 	return 0;
