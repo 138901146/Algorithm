@@ -8,7 +8,7 @@ int compare(const void *x,const void *y)
 
 int main(void)
 {
-	int N, A, B, *appointment=NULL;
+	int N, A, B, t[50];
 
 	scanf("%d", &N);
 
@@ -18,16 +18,13 @@ int main(void)
 		return 0;
 	}
 
-	appointment=(int *)malloc(N*sizeof(int));
-
 	for(int i=0;i<N;++i)
 	{
 		scanf("%d%d", &A, &B);
-		appointment[i]=A-B;
+		t[i]=A-B;
 	}
-	qsort((void *)appointment,(size_t)N,sizeof(int),compare);
+	qsort((void *)t,(size_t)N,sizeof(int),compare);
 
-	printf("%d", appointment[N>>1]-appointment[(N>>1)-1]+1);
-	free(appointment);
+	printf("%d", t[N>>1]-t[N-1>>1]+1);
 	return 0;
 }
