@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<string.h>
 
 int bigger(int x,int y)
 {
@@ -13,9 +14,7 @@ int main(void)
 
 	for(int n=0;n<N;++n, current^=1, previous^=1)
 	{
-		for(int i=1;i<=N;++i)
-			for(int j=0;j<3;++j)
-				milk[current][i][j]=0;
+		memset(milk[current],0,3*(N+1));
 
 		for(int i=1;i<=N;++i)
 		{
