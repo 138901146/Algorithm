@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
 int main(void)
 {
@@ -8,7 +8,7 @@ int main(void)
 	scanf("%d", &N);
 	LIS=(int *)malloc(N*sizeof(int));
 
-	for(int i=0;i<N;i++)
+	for(int i=0;i<N;++i)
 	{
 		int left=0, right=length, mid;
 		LIS[i]=10000000;
@@ -16,7 +16,7 @@ int main(void)
 
 		while(left<right)
 		{
-			mid=(left+right)/2;
+			mid=left+right>>1;
 			if(LIS[mid]>A)
 				right=mid-1;
 			else if(LIS[mid]<A)
@@ -24,7 +24,7 @@ int main(void)
 			else
 				break;
 		}
-		mid=(left+right)/2;
+		mid=left+right>>1;
 
 		if(A<=LIS[mid])
 			LIS[mid]=A;
@@ -33,7 +33,7 @@ int main(void)
 		length+=mid==length;
 	}
 
-	printf("%d\n", length);
+	printf("%d", length);
 	free(LIS);
 	return 0;
 }
