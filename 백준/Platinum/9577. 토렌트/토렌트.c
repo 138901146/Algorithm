@@ -62,7 +62,7 @@ int main(void)
 					piece[i][piece_count[i]++]=j;
 		}
 
-		for(short i=0;i<101;++i)
+		for(short i=1;i<101;++i)
 		{
 			memset(visited,0,101);
 			received+=dfs(i);
