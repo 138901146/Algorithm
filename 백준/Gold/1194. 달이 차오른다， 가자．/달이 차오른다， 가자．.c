@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 #include<stdbool.h>
 
 int main(void)
@@ -12,12 +12,12 @@ int main(void)
 	map=(char **)malloc(N*sizeof(char *));
 	queue=(int *)malloc(64*N*M*sizeof(int));
 	visited=(bool ***)malloc(N*sizeof(bool **));
-	for(int n=0;n<N;n++)
+	for(int n=0;n<N;++n)
 	{
 		map[n]=(char *)calloc(M+1,sizeof(char));
 		visited[n]=(bool **)malloc(M*sizeof(bool *));
 		scanf("%s", map[n]);
-		for(int m=0;m<M;m++)
+		for(int m=0;m<M;++m)
 		{
 			visited[n][m]=(bool *)calloc(64,sizeof(bool));
 			if(map[n][m]=='0')
@@ -46,8 +46,8 @@ int main(void)
 				break;
 			}
 
-			for(int i=0;i<4;i++)
-				if(y+move[i][0]>=0 && y+move[i][0]<N && x+move[i][1]>=0 && x+move[i][1]<M)
+			for(int i=0;i<4;++i)
+				if(0<=y+move[i][0] && y+move[i][0]<N && 0<=x+move[i][1] && x+move[i][1]<M)
 					switch(map[y+move[i][0]][x+move[i][1]])
 					{
 						case 'a':
@@ -56,10 +56,10 @@ int main(void)
 						case 'd':
 						case 'e':
 						case 'f':
-							if(!visited[y+move[i][0]][x+move[i][1]][state|1<<(map[y+move[i][0]][x+move[i][1]]-'a')])
+							if(!visited[y+move[i][0]][x+move[i][1]][1<<map[y+move[i][0]][x+move[i][1]]-'a'|state])
 							{
-								visited[y+move[i][0]][x+move[i][1]][state|1<<(map[y+move[i][0]][x+move[i][1]]-'a')]=true;
-								queue[rear++]=((y+move[i][0])<<16)|((x+move[i][1])<<8)|(state|(1<<(map[y+move[i][0]][x+move[i][1]]-'a')));
+								visited[y+move[i][0]][x+move[i][1]][1<<map[y+move[i][0]][x+move[i][1]]-'a'|state]=true;
+								queue[rear++]=(y+move[i][0]<<16)|(x+move[i][1]<<8)|(1<<map[y+move[i][0]][x+move[i][1]]-'a'|state);
 							}
 							break;
 						case 'A':
@@ -68,36 +68,36 @@ int main(void)
 						case 'D':
 						case 'E':
 						case 'F':
-							if((state&(1<<(map[y+move[i][0]][x+move[i][1]]-'A')))!=0 && !visited[y+move[i][0]][x+move[i][1]][state])
+							if(state&(1<<map[y+move[i][0]][x+move[i][1]]-'A') && !visited[y+move[i][0]][x+move[i][1]][state])
 							{
 								visited[y+move[i][0]][x+move[i][1]][state]=true;
-								queue[rear++]=((y+move[i][0])<<16)|((x+move[i][1])<<8)|state;
+								queue[rear++]=(y+move[i][0]<<16)|(x+move[i][1]<<8)|state;
 							}
 							break;
 						case '.':
 							if(!visited[y+move[i][0]][x+move[i][1]][state])
 							{
 								visited[y+move[i][0]][x+move[i][1]][state]=true;
-								queue[rear++]=((y+move[i][0])<<16)|((x+move[i][1])<<8)|state;
+								queue[rear++]=(y+move[i][0]<<16)|(x+move[i][1])<<8|state;
 							}
 							break;
 						case '1':
-							queue[rear++]=((y+move[i][0])<<16)|((x+move[i][1])<<8)|state;
+							queue[rear++]=(y+move[i][0]<<16)|(x+move[i][1]<<8)|state;
 							break;
 						default:
 							break;
 					}
-			front++;
+			++front;
 		}
 		if(found)
 			break;
-		count++;
+		++count;
 	}
 
-	printf("%d\n", found?count:-1);
-	for(int n=0;n<N;n++)
+	printf("%d", found?count:-1);
+	for(int n=0;n<N;++n)
 	{
-		for(int m=0;m<M;m++)
+		for(int m=0;m<M;++m)
 			free(visited[n][m]);
 		free(visited[n]);
 		free(map[n]);
