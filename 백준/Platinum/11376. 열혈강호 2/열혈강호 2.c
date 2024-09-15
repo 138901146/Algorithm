@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<malloc.h>
 #include<stdbool.h>
+#include<memory.h>
 
 int *work=NULL, **employee=NULL, *employee_count=NULL;
 bool *visited=NULL;
@@ -8,16 +9,20 @@ bool *visited=NULL;
 bool dfs(int current)
 {
 	for(int i=0;i<employee_count[current];++i)
-		if(!visited[employee[current][i]])
-		{
-			visited[employee[current][i]]=true;
+	{
+		int next=employee[current][i];
 
-			if(work[employee[current][i]]==0 || dfs(work[employee[current][i]]))
+		if(!visited[next])
+		{
+			visited[next]=true;
+
+			if(!work[next] || dfs(work[next]))
 			{
-				work[employee[current][i]]=current;
+				work[next]=current;
 				return true;
 			}
 		}
+	}
 
 	return false;
 }
@@ -44,8 +49,7 @@ int main(void)
 	for(int n=1;n<=N;++n)
 		for(int i=0;i<2;++i)
 		{
-			for(int m=1;m<=M;++m)
-				visited[m]=false;
+			memset(visited+1,0,M);
 			dfs(n);
 		}
 
