@@ -44,7 +44,6 @@ int main(void)
 
 		scanf("%d", &N);
 
-		memset(adjacent_list,0,249999*sizeof(int));
 		memset(adjacent_list_count,0,501*sizeof(int));
 		memset(occupied,0,500*sizeof(int));
 
