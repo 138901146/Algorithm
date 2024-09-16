@@ -110,8 +110,8 @@ int main(void)
 		free(matched);
 	}
 
-	for(int n=1;n<=N;++n)
-		free(adjacent_list[n]);
+	while(N)
+		free(adjacent_list[N--]);
 	free(adjacent_list);
 	free(adjacent_list_count);
 	free(occupied);
