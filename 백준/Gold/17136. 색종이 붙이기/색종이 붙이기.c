@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdbool.h>
+#include<memory.h>
 
 bool paper[10][10];
 int min=100;
@@ -24,9 +25,7 @@ void simulate(int r,int c,bool filled[10][10],int count,int left[5])
 
 	bool attachable=true, current[10][10];
 
-	for(int i=0;i<10;++i)
-		for(int j=0;j<10;++j)
-			current[i][j]=filled[i][j];
+	memcpy(current,filled,100);
 
 	for(int i=1;i<=5&&attachable&&r+i<=10&&c+i<=10;++i)
 	{
