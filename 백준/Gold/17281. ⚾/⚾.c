@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<stdbool.h>
-#include<malloc.h>
 
 int permutation[8]={1,2,3,4,5,6,7,8};
 
@@ -33,17 +32,13 @@ bool next_permutation(void)
 
 int main(void)
 {
-	int N, max=0, **order=NULL;
+	int N, max=0, order[50][9];
 
 	scanf("%d", &N);
-	order=(int **)malloc(N*sizeof(int *));
 
 	for(int n=0;n<N;++n)
-	{
-		order[n]=(int *)malloc(9*sizeof(int));
 		for(int i=0;i<9;++i)
 			scanf("%d", &order[n][i]);
-	}
 
 	do
 	{
@@ -97,9 +92,6 @@ int main(void)
 	}
 	while(next_permutation());
 
-	while(N--)
-		free(order[N]);
-	free(order);
 	printf("%d", max);
 	return 0;
 }
