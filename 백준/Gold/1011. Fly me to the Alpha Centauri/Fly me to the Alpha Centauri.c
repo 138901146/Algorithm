@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	int x, y, root, T;
+	int x, y, T;
 
 	scanf("%d", &T);
 
@@ -12,9 +12,9 @@ int main(void)
 		scanf("%d%d", &x, &y);
 
 		y-=x;
-		root=sqrt(y-1);
+		x=sqrt(y-1);
 
-		printf("%d\n", (root<<1)+(root*root+root<y));
+		printf("%d\n", (x<<1)+(x*x+x<y));
 	}
 
 	return 0;
