@@ -1,36 +1,28 @@
 #include<stdio.h>
 #include<math.h>
 
-int distance[4][4]={0};
-double best=10000;
+int x[4], y[4];
+double min=10000;
 
-void simulate(double moved,int current,int visited)
+void calculate(int current,int done,double distance)
 {
-	if(visited==15)
+	if(done==15)
 	{
-		best=(int)moved<best?(int)moved:best;
+		min=distance<min?distance:min;
 		return;
 	}
-
 	for(int i=1;i<4;++i)
-		if(!(1<<i&visited))
-			simulate(moved+sqrt(distance[current][i]),i,1<<i|visited);
+		if(!(1<<i&done))
+			calculate(i,1<<i|done,distance+sqrt((x[i]-x[current])*(x[i]-x[current])+(y[i]-y[current])*(y[i]-y[current])));
 }
 
 int main(void)
 {
-	int location[4][2];
-
 	for(int i=0;i<4;++i)
-	{
-		scanf("%d%d", &location[i][0], &location[i][1]);
+		scanf("%d%d", &x[i], &y[i]);
 
-		for(int j=0;j<i;++j)
-			distance[i][j]=distance[j][i]=(location[i][0]-location[j][0])*(location[i][0]-location[j][0])+(location[i][1]-location[j][1])*(location[i][1]-location[j][1]);
-	}
+	calculate(0,1,0);
 
-	simulate(0,0,1);
-
-	printf("%d", (int)best);
+	printf("%d", (int)min);
 	return 0;
 }
