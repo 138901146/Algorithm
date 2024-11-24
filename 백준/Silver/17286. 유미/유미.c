@@ -2,7 +2,7 @@
 #include<math.h>
 
 int x[4], y[4];
-double min=10000;
+double min=100;
 
 void calculate(int current,int done,double distance)
 {
