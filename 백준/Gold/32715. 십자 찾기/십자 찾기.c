@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<stdbool.h>
 
-bool paper[2502][2502]={0};
-int up[2502][2502]={0}, down[2502][2502]={0}, left[2502][2502]={0}, right[2502][2502]={0};
+bool paper[2501][2501]={0};
+int up[2501][2501]={0}, down[2502][2501]={0}, left[2501][2501]={0}, right[2501][2502]={0};
 
 int main(void)
 {
@@ -16,8 +16,8 @@ int main(void)
 		{
 			scanf("%d", &paper[r][c]);
 
-			left[r][c]=paper[r][c]?left[r][c-1]+1:0;
 			up[r][c]=paper[r][c]?up[r-1][c]+1:0;
+			left[r][c]=paper[r][c]?left[r][c-1]+1:0;
 		}
 
 	for(int r=N;r;--r)
