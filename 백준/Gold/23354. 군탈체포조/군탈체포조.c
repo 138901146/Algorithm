@@ -7,24 +7,24 @@ long long *pq=NULL;
 long long get(void)
 {
 	int index=1, next, right, left;
-	long long value=pq[1], temp;
+	long long value=pq[1];
 	pq[1]=pq[--size];
 
 	while(index<size)
 	{
 		left=index<<1;
 		right=index<<1|1;
-		next=size>right?(pq[right]>>20)<(pq[left]>>20)?right:left:size==right?left:index;
+		next=size>right?pq[right]>>20<pq[left]>>20?right:left:size==right?left:index;
 
 		if(index==next)
 			break;
 		else
 		{
-			if((pq[index]>>20)>(pq[next]>>20))
+			if(pq[index]>>20>pq[next]>>20)
 			{
-				temp=pq[index];
+				pq[0]=pq[index];
 				pq[index]=pq[next];
-				pq[next]=temp;
+				pq[next]=pq[0];
 				index=next;
 			}
 			else
@@ -38,17 +38,16 @@ long long get(void)
 void add(long long value)
 {
 	int index=size, next;
-	long long temp;
 	pq[size++]=value;
 
 	while(index>1)
 	{
 		next=index>>1;
-		if((pq[index]>>20)<(pq[next]>>20))
+		if(pq[index]>>20<pq[next]>>20)
 		{
-			temp=pq[index];
+			pq[0]=pq[index];
 			pq[index]=pq[next];
-			pq[next]=temp;
+			pq[next]=pq[0];
 			index=next;
 		}
 		else
@@ -64,9 +63,9 @@ int deserter_pursuit(int state,int current)
 	int min=1<<30, rotate;
 
 	for(int i=1;i<count;i++)
-		if((state&(1<<i))==0)
+		if(!(state&(1<<i)))
 		{
-			rotate=deserter[current][i]+deserter_pursuit(state|(1<<i),i);
+			rotate=deserter[current][i]+deserter_pursuit(1<<i|state,i);
 			min=rotate<min?rotate:min;
 		}
 
@@ -80,10 +79,10 @@ int main(void)
 	scanf("%d", &N);
 	pq=(long long *)malloc(N*N*10*sizeof(long long));
 	map=(int **)malloc(N*sizeof(int *));
-	for(int i=0;i<N;i++)
+	for(int i=0;i<N;++i)
 	{
 		map[i]=(int *)malloc(N*sizeof(int));
-		for(int j=0;j<N;j++)
+		for(int j=0;j<N;++j)
 		{
 			scanf("%d", &map[i][j]);
 			if(map[i][j]==-1)
@@ -91,29 +90,29 @@ int main(void)
 				map[i][j]=0;
 				soilder[0]=i<<10|j;
 			}
-			else if(map[i][j]==0)
+			else if(!map[i][j])
 				soilder[count++]=i<<10|j;
 		}
 	}
 
 	if(count==1)
 	{
-		printf("0\n");
-		for(int n=0;n<N;n++)
+		printf("0");
+		for(int n=0;n<N;++n)
 			free(map[n]);
 		free(map);
 		return 0;
 	}
 
 	distance=(int **)malloc(N*sizeof(int *));
-	for(int n=0;n<N;n++)
+	for(int n=0;n<N;++n)
 		distance[n]=(int *)malloc(N*sizeof(int));
 	deserter=(int **)malloc(count*sizeof(int *));
 
-	for(int i=0;i<count-1;i++)
+	for(int i=0;i<count-1;++i)
 	{
-		for(int j=0;j<N;j++)
-			for(int k=0;k<N;k++)
+		for(int j=0;j<N;++j)
+			for(int k=0;k<N;++k)
 				distance[j][k]=536870912;
 
 		distance[soilder[i]>>10][soilder[i]&1023]=0;
@@ -129,7 +128,7 @@ int main(void)
 			int value=next>>10;
 
 			if(value==distance[y][x])
-				for(int j=0;j<4;j++)
+				for(int j=0;j<4;++j)
 				{
 					y+=move[j][0];
 					x+=move[j][1];
@@ -144,22 +143,22 @@ int main(void)
 		}
 
 		deserter[i]=(int *)malloc(count*sizeof(int));
-		for(int j=0;j<count;j++)
+		for(int j=0;j<count;++j)
 			deserter[i][j]=distance[soilder[j]>>10][soilder[j]&1023];
 	}
 	deserter[count-1]=(int *)calloc(count,sizeof(int));
-	for(int i=0;i<count-1;i++)
+	for(int i=0;i<count-1;++i)
 		deserter[count-1][i]=deserter[i][count-1];
 
-	for(int n=0;n<N;n++)
+	for(int n=0;n<N;++n)
 	{
 		free(map[n]);
 		free(distance[n]);
 	}
 	free(distance);
 	free(map);
-	printf("%d\n", deserter_pursuit(1,0));
-	for(int i=0;i<count;i++)
+	printf("%d", deserter_pursuit(1,0));
+	for(int i=0;i<count;++i)
 		free(deserter[i]);
 	free(deserter);
 	free(pq);
