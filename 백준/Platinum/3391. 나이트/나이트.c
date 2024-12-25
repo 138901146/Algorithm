@@ -1,11 +1,9 @@
 #include<stdio.h>
 #include<stdbool.h>
-#include<memory.h>
 
 #define INF 99999
 
 int adjacent_list[20001][8], adjacent_list_count[20001]={0}, level[20001], odd[20001]={0}, even[20001]={0};
-//bool used[20001]={0};
 
 bool dfs(int current)
 {
