@@ -3,8 +3,10 @@
 #include<stdbool.h>
 #include<memory.h>
 
-int **adjacent_list=NULL, *adjacent_list_count=NULL, *occupied=NULL;
-bool *visited=NULL;
+#define INF 99999
+
+int **adjacent_list=NULL, *adjacent_list_count=NULL, occupied[20000], level[10000];
+bool used[10000];
 
 bool dfs(int current)
 {
@@ -12,15 +14,11 @@ bool dfs(int current)
 	{
 		int next=adjacent_list[current][i];
 
-		if(!visited[next])
+		if(occupied[next]==-1 || level[occupied[next]]==level[current]+1&&dfs(occupied[next]))
 		{
-			visited[next]=true;
-
-			if(occupied[next]==-1 || dfs(occupied[next]))
-			{
-				occupied[next]=current;
-				return true;
-			}
+			used[current]=true;
+			occupied[next]=current;
+			return true;
 		}
 	}
 
@@ -29,14 +27,16 @@ bool dfs(int current)
 
 int main(void)
 {
-	int n;
+	int n, queue[10000], front, rear, flow;
 
 	while(scanf("%d", &n)!=EOF)
 	{
-		int count=0;
+		int matched=0;
 
 		adjacent_list=(int **)malloc(n*sizeof(int *));
 		adjacent_list_count=(int *)calloc(n,sizeof(int));
+		memset(occupied,-1,20000*sizeof(int));
+		memset(used,0,10000);
 
 		for(int i=0;i<n;++i)
 		{
@@ -53,25 +53,47 @@ int main(void)
 				scanf("%d", &adjacent_list[id][j]);
 		}
 
-		occupied=(int *)malloc((n<<1)*sizeof(int));
-		visited=(bool *)malloc((n<<1)*sizeof(bool));
-
-		for(int i=0;i<(n<<1);++i)
-			occupied[i]=-1;
-
-		for(int i=0;i<n;++i)
+		do
 		{
-			memset(visited,0,n<<1);
-			count+=dfs(i);
-		}
+			flow=front=rear=0;
 
-		printf("%d\n", count);
+			for(int i=0;i<n;++i)
+				if(used[i])
+					level[i]=INF;
+				else
+				{
+					level[i]=0;
+					queue[rear++]=i;
+				}
+
+			while(front<rear)
+			{
+				int current=queue[front++];
+
+				for(int i=0;i<adjacent_list_count[current];++i)
+				{
+					int next=adjacent_list[current][i];
+
+					if(occupied[next]!=-1 && level[occupied[next]]==INF)
+					{
+						level[occupied[next]]=level[current]+1;
+						queue[rear++]=occupied[next];
+					}
+				}
+			}
+
+			for(int i=0;i<n;++i)
+				flow+=!used[i]&&dfs(i);
+
+			matched+=flow;
+		}
+		while(flow);
+
+		printf("%d\n", matched);
 		for(int i=0;i<n;++i)
 			free(adjacent_list[i]);
 		free(adjacent_list);
 		free(adjacent_list_count);
-		free(occupied);
-		free(visited);
 	}
 
 	return 0;
