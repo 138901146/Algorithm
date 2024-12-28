@@ -67,11 +67,10 @@ int main(void)
 	}
 
 	for(int n=1;n<=N;++n)
-		if(location[n][0]+location[n][1]+location[n][2]&1)
-		{
-			memset(visited,0,1501);
-			matched+=dfs(n);
-		}
+	{
+		memset(visited,0,1501);
+		matched+=dfs(n);
+	}
 
 	printf("%d", matched);
 	return 0;
