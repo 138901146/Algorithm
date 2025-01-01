@@ -18,7 +18,7 @@
 
 <p>Dana jest szachownica o wymiarach <em>n</em> × <em>n</em>, z której usunięto pewną liczbę pól. Należy wyznaczyć maksymalną liczbę skoczków (koników) szachowych, które można ustawić na pozostałych polach szachownicy tak, żeby żadne dwa skoczki nie atakowały się nawzajem.</p>
 
-<p style="text-align: center;"><img alt="" src=""></p>
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/af771a5e-a23d-4b79-8dfb-fb7de17321f2/-/preview/"></p>
 
 <p style="text-align: center;">Rysunek 1: Skoczek umieszczony w polu S atakuje pola oznaczone przez x.</p>
 
