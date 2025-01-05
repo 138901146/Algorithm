@@ -30,13 +30,13 @@ bool dfs(int current)
 
 int main(void)
 {
-	int T;
+	int T, room=0;
 
 	cin>>T;
 
 	for(int t=1;t<=T;++t)
 	{
-		int N, M, K, room=0, dr[4]={-1,0,0,1}, dc[4]={0,-1,1,0}, dk[2]={-1,1}, matched=0;
+		int N, M, K, dr[4]={-1,0,0,1}, dc[4]={0,-1,1,0}, dk[2]={-1,1}, matched=0;
 		char B[50][20][21]={0};
 		queue<pair<int,int>> q;
 		map<tuple<int,int,int>,int> id;
@@ -48,13 +48,18 @@ int main(void)
 			for(int n=0;n<N;++n)
 				cin>>B[k][n];
 
+		for(int i=1;i<=room;++i)
+			adjacent_list[i].clear();
+		memset(occupied,0,(room+1)*sizeof(int));
+		room=0;
+
 		for(int k=0;k<K;++k)
 			for(int n=0;n<N;++n)
 				for(int m=0;m<M;++m)
-					if(B[k][n][m]=='.' && !id[make_tuple(k,n,m)])
+					if(B[k][n][m]=='.' && !id[{k,n,m}])
 					{
-						q.push(make_pair(n,m));
-						id[make_tuple(k,n,m)]=++room;
+						q.push({n,m});
+						id[{k,n,m}]=++room;
 
 						while(!q.empty())
 						{
@@ -62,10 +67,10 @@ int main(void)
 							{
 								int r=q.front().first+dr[i], c=q.front().second+dc[i];
 
-								if(0<=r && r<N && 0<=c && c<M && B[k][r][c]=='.' && !id[make_tuple(k,r,c)])
+								if(0<=r && r<N && 0<=c && c<M && B[k][r][c]=='.' && !id[{k,r,c}])
 								{
-									id[make_tuple(k,r,c)]=room;
-									q.push(make_pair(r,c));
+									id[{k,r,c}]=room;
+									q.push({r,c});
 								}
 							}
 
@@ -73,27 +78,23 @@ int main(void)
 						}
 					}
 
-		for(int i=0;i<20001;++i)
-			adjacent_list[i].clear();
-		memset(occupied,0,20001*sizeof(int));
-
 		for(int k=0;k<K;++k)
 			for(int n=0;n<N;++n)
 				for(int m=0;m<M;++m)
 				{
-					tuple<int,int,int> origin=make_tuple(k,n,m);
+					tuple<int,int,int> origin={k,n,m};
 
 					if (id[origin])
 						for(int i=0;i<2;++i)
 						{
 							int next_k=k+dk[i];
-							tuple<int,int,int> next=make_tuple(next_k,n,m);
+							tuple<int,int,int> next={next_k,n,m};
 
-							if(next_k<0 || K<=next_k || !id[next] || connected.contains(make_pair(id[origin],id[next])))
+							if(next_k<0 || K<=next_k || !id[next] || connected.contains({id[origin],id[next]}))
 								continue;
 
-							connected.insert(make_pair(id[origin],id[next]));
-							connected.insert(make_pair(id[next],id[origin]));
+							connected.insert({id[origin],id[next]});
+							connected.insert({id[next],id[origin]});
 							if (k&1)
 								adjacent_list[id[origin]].push_back(id[next]);
 							else
@@ -103,7 +104,7 @@ int main(void)
 
 		for(int i=1;i<=room;++i)
 		{
-			memset(visited,0,20001);
+			memset(visited,0,room+1);
 			matched+=dfs(i);
 		}
 
