@@ -1,5 +1,6 @@
 #include<stdio.h>
-#include<malloc.h>
+
+int sg[1000000], sy[1000000];
 
 int main(void)
 {
@@ -9,7 +10,7 @@ int main(void)
 
 	while(N || M)
 	{
-		int n=0, m=0, count=0, *sg=malloc(N*sizeof(int)), *sy=malloc(N*sizeof(int));
+		int n=0, m=0, count=0;
 
 		for(int i=0;i<N;++i)
 			scanf("%d", &sg[i]);
@@ -30,9 +31,6 @@ int main(void)
 			}
 
 		printf("%d\n", count);
-		free(sg);
-		free(sy);
-
 		scanf("%d%d", &N, &M);
 	}
 
