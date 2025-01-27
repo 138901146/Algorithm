@@ -15,7 +15,7 @@ typedef struct
 edge;
 
 int size;
-edge pq[8000];
+edge pq[400];
 
 edge convert(vertex origin)
 {
