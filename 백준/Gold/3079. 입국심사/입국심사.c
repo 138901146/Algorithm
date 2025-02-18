@@ -17,10 +17,10 @@ int main(void)
 	while(left<=right)
 	{
 		count=0;
-		mid=(left+right)/2;
+		mid=left+right>>1;
 
 		for(int k=0;k<N;++k)
-			count+=(unsigned long long)mid/T[k];
+			count+=mid/T[k];
 
 		if(M<=count)
 		{
