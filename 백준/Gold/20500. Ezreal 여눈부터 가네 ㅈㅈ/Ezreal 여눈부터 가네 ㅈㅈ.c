@@ -4,10 +4,9 @@
 
 int main(void)
 {
-	int N, current=1, previous=0;
-	long long count[2][3]={0,0,1};
+	unsigned int N, current=1, previous=0, count[2][3]={0,0,1};
 
-	scanf("%d", &N);
+	scanf("%u", &N);
 
 	while(--N)
 	{
@@ -18,6 +17,6 @@ int main(void)
 		previous^=1;
 	}
 
-	printf("%lld", count[previous][0]);
+	printf("%u", count[previous][0]);
 	return 0;
 }
