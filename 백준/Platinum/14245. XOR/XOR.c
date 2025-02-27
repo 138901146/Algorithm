@@ -70,11 +70,10 @@ int main(void)
 	scanf("%d", &N);
 	arr=(int *)malloc(N*sizeof(int));
 	while((1<<size)<N)
-		size++;
-	size++;
-	size=1<<size;
+		++size;
+	size=1<<++size;
 
-	for(int n=0;n<N;n++)
+	for(int n=0;n<N;++n)
 		scanf("%d", &arr[n]);
 
 	tree=(long long *)malloc(size*sizeof(long long));
@@ -83,7 +82,7 @@ int main(void)
 	lazy=(long long *)calloc(size,sizeof(long long));
 
 	scanf("%d", &M);
-	for(int m=0;m<M;m++)
+	while(M--)
 	{
 		scanf("%d%d", &operation, &a);
 
