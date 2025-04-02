@@ -13,8 +13,7 @@ int main(void)
 	}
 
 	for(i=0;i<51;++i)
-		if(count[i]==i)
-			max=i;
+		max=count[i]==i?i:max;
 
 	printf("%d", max);
 	return 0;
