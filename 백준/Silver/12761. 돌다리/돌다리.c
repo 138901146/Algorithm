@@ -17,55 +17,14 @@ int main(void)
 
 	while(front<rear && min[M]==-1)
 	{
-		if(0<queue[front] && min[queue[front]-1]==-1)
-		{
-			min[queue[front]-1]=min[queue[front]]+1;
-			queue[rear++]=queue[front]-1;
-		}
+		long long cur=queue[front++], table[8]={cur-1,cur+1,cur-A,cur+A,cur-B,cur+B,cur*A,cur*B};
 
-		if(queue[front]<100000 && min[queue[front]+1]==-1)
-		{
-			min[queue[front]+1]=min[queue[front]]+1;
-			queue[rear++]=queue[front]+1;
-		}
-
-		if(A<=queue[front] && min[queue[front]-A]==-1)
-		{
-			min[queue[front]-A]=min[queue[front]]+1;
-			queue[rear++]=queue[front]-A;
-		}
-
-		if(queue[front]+A<=100000 && min[queue[front]+A]==-1)
-		{
-			min[queue[front]+A]=min[queue[front]]+1;
-			queue[rear++]=queue[front]+A;
-		}
-
-		if(B<=queue[front] && min[queue[front]-B]==-1)
-		{
-			min[queue[front]-B]=min[queue[front]]+1;
-			queue[rear++]=queue[front]-B;
-		}
-
-		if(queue[front]+B<=100000 && min[queue[front]+B]==-1)
-		{
-			min[queue[front]+B]=min[queue[front]]+1;
-			queue[rear++]=queue[front]+B;
-		}
-
-		if((long long)queue[front]*A<=100000 && min[queue[front]*A]==-1)
-		{
-			min[queue[front]*A]=min[queue[front]]+1;
-			queue[rear++]=queue[front]*A;
-		}
-
-		if((long long)queue[front]*B<=100000 && min[queue[front]*B]==-1)
-		{
-			min[queue[front]*B]=min[queue[front]]+1;
-			queue[rear++]=queue[front]*B;
-		}
-
-		++front;
+		for(int i=0;i<8;++i)
+			if(0<table[i] && table[i]<100001 && min[table[i]]==-1)
+			{
+				min[table[i]]=min[cur]+1;
+				queue[rear++]=table[i];
+			}
 	}
 
 	printf("%d", min[M]);
