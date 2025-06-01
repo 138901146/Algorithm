@@ -1,43 +1,29 @@
 #include<stdio.h>
-#include<malloc.h>
 
-#define INF 12345678
+#define INF 9999999
 
 int main(void)
 {
-	int N, *A, **result=NULL;
+	int N, A[2], result[2][4]={-INF,-INF,-INF,-INF}, previous=1, current=0;
 
 	scanf("%d", &N);
-	A=(int *)calloc(N+1,sizeof(int));
-	result=(int **)malloc((N+1)*sizeof(int *));
 
-	result[0]=(int *)malloc(4*sizeof(int));
-	result[0][0]=result[0][1]=result[0][2]=result[0][3]=-INF;
-	for(int n=1;n<=N;++n)
+	while(N--)
 	{
-		scanf("%d", &A[n]);
-		result[n]=(int *)malloc(4*sizeof(int));
+		current^=1;
+		previous^=1;
 
 		for(int i=0;i<4;++i)
-			result[n][i]=result[n-1][i];
+			result[current][i]=result[previous][i];
 
-		result[n][0]=result[n][0]<-A[n]?-A[n]:result[n][0];
-		if(1<n)
-		{
-			result[n][1]=result[n][1]<result[n-1][0]+A[n]?result[n-1][0]+A[n]:result[n][1];
-			if(2<n)
-			{
-				result[n][2]=result[n][2]<result[n-1][1]-A[n]?result[n-1][1]-A[n]:result[n][2];
-				if(3<n)
-					result[n][3]=result[n][3]<result[n-1][2]+A[n]?result[n-1][2]+A[n]:result[n][3];
-			}
-		}
+		scanf("%d", &A[current]);
+
+		result[current][0]=result[current][0]<-A[current]?-A[current]:result[current][0];
+		result[current][1]=result[current][1]<result[previous][0]+A[current]?result[previous][0]+A[current]:result[current][1];
+		result[current][2]=result[current][2]<result[previous][1]-A[current]?result[previous][1]-A[current]:result[current][2];
+		result[current][3]=result[current][3]<result[previous][2]+A[current]?result[previous][2]+A[current]:result[current][3];
 	}
 
-	printf("%d", result[N][3]);
-	for(int n=0;n<=N;++n)
-		free(result[n]);
-	free(result);
-	free(A);
+	printf("%d", result[current][3]);
 	return 0;
 }
