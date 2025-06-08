@@ -4,7 +4,7 @@
 
 #define INF 999
 
-int escape_location[44], escape_count=0, prisoner_location[100], prisoner_count=0, id[12][12], distance[44][100], adjacent_list[100][4400], adjacent_list_count[4400], occupied[4400];
+int adjacent_list[100][4400], adjacent_list_count[4400], occupied[4400];
 bool visited[4400];
 
 bool dfs(int current)
@@ -30,7 +30,7 @@ bool dfs(int current)
 
 int main(void)
 {
-	int N, M, left=0, right=100, mid, answer=100, dr[4]={-1,0,0,1}, dc[4]={0,-1,1,0};
+	int N, M, escape_location[44], escape_count=0, prisoner_location[100], prisoner_count=0, id[12][12], distance[44][100], left=0, right=100, mid, answer=100, dr[4]={-1,0,0,1}, dc[4]={0,-1,1,0};
 	char map[12][13]={0};
 
 	memset(id,-1,144*sizeof(int));
