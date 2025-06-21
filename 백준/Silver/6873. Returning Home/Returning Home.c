@@ -4,7 +4,7 @@
 int main(void)
 {
 	int count=0;
-	char direction[100]={0}, street[100][11]={0};
+	char direction[10]={0}, street[10][11]={0};
 
 	do
 	{
