@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-int min[1000001]={0}, queue[1000000];
+int min[1000001]={0}, queue[900000];
 
 int main(void)
 {
