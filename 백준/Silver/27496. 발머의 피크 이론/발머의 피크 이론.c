@@ -9,16 +9,11 @@ int main(void)
 	scanf("%d%d", &N, &L);
 	C=(long long *)calloc(N+L+1,sizeof(long long));
 
-	for(int i=0;i<N;++i)
-	{
-		scanf("%d", &a);
-		C[i+1]+=a;
-		C[i+1+L]-=a;
-	}
-
 	for(int i=1;i<=N;++i)
 	{
-		C[i]+=C[i-1];
+		scanf("%d", &a);
+		C[i]+=C[i-1]+a;
+		C[i+L]-=a;
 		count+=128<C[i]&&C[i]<139;
 	}
 
