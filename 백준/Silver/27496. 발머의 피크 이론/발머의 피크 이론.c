@@ -3,11 +3,10 @@
 
 int main(void)
 {
-	int N, L, a, count=0;
-	long long *C=NULL;
+	int N, L, a, *C=NULL, count=0;
 
 	scanf("%d%d", &N, &L);
-	C=(long long *)calloc(N+L+1,sizeof(long long));
+	C=(int *)calloc(N+L+1,sizeof(int));
 
 	for(int i=1;i<=N;++i)
 	{
