@@ -14,7 +14,7 @@ int compare(const void *x,const void *y)
 
 int main(void)
 {
-	int N, team, m, s, winning[2]={0}, score[2]={0};
+	int N, m, s, winning[2]={0}, score[2]={0};
 	status goal[100];
 
 	scanf("%d", &N);
