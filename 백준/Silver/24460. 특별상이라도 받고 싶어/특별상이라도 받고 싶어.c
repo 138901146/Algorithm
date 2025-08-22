@@ -10,15 +10,11 @@ int compare(const void *x,const void *y)
 
 int prize(int r_s,int c_s,int r_e,int c_e)
 {
-	int number[4], r_m=r_s+r_e>>1, c_m=c_s+c_e>>1;
-
 	if(r_s==r_e&&c_s==c_e)
 		return seat[r_s][c_s];
 
-	number[0]=prize(r_s,c_s,r_m,c_m);
-	number[1]=prize(r_s,c_m+1,r_m,c_e);
-	number[2]=prize(r_m+1,c_s,r_e,c_m);
-	number[3]=prize(r_m+1,c_m+1,r_e,c_e);
+	int r_m=r_s+r_e>>1, c_m=c_s+c_e>>1, number[4]={prize(r_s,c_s,r_m,c_m),prize(r_s,c_m+1,r_m,c_e),prize(r_m+1,c_s,r_e,c_m),prize(r_m+1,c_m+1,r_e,c_e)};
+
 	qsort((void *)number,(size_t)4,sizeof(int),compare);
 
 	return number[1];
