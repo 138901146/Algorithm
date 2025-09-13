@@ -31,19 +31,6 @@ int main(void)
 		}
 	}
 
-	if(P==-1)
-	{
-		long long count=0;
-
-		for(int n=0;n<N;++n)
-		{
-			int cut=(K<<1)<=L[n]?L[n]-(K<<1):K<L[n]?L[n]-K:0;
-			count+=cut;
-		}
-
-		P=count<M?-1:1;
-	}
-
 	printf("%lld", P);
 	free(L);
 	return 0;
