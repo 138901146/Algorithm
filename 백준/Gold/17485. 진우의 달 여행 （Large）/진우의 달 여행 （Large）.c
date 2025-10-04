@@ -8,13 +8,14 @@ int main(void)
 	int N, M, **matrix=NULL, smallest[1000][3][2]={0,}, current=0, next=1, direction[3]={-1,0,1}, min=INF;
 
 	scanf("%d%d", &N, &M);
+
 	matrix=(int **)malloc(N*sizeof(int *));
 	for(int n=0;n<N;++n)
-	{
 		matrix[n]=(int *)malloc(M*sizeof(int));
+
+	for(int n=0;n<N;++n)
 		for(int m=0;m<M;++m)
 			scanf("%d", &matrix[n][m]);
-	}
 
 	for(int n=0;n<N;++n,current^=1,next^=1)
 	{
