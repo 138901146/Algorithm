@@ -4,7 +4,7 @@
 
 int main(void)
 {
-	int N, M, x, y, u, v, min[101], queue[200], front=0, rear=1, jump[101]={0,};
+	int N, M, x, y, u, v, min[101], queue[100], front=0, rear=1, jump[101]={0,};
 
 	scanf("%d%d", &N, &M);
 	while(N--)
