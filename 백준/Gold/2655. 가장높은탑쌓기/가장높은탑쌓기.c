@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<stdbool.h>
 
 typedef struct
 {
@@ -26,8 +25,7 @@ int compare_by_weight(const void *x,const void *y)
 
 int main(void)
 {
-	int size, max=0, count=1, start, current;
-	bool is_area_higher=true;
+	int size, max=0, count=1, start, current, is_area_higher=1;
 	specification brick[100];
 	best area[100], weight[100];
 
@@ -68,7 +66,7 @@ int main(void)
 		if(max<=weight[i].height)
 		{
 			max=weight[i].height;
-			is_area_higher=false;
+			is_area_higher=0;
 		}
 	}
 
