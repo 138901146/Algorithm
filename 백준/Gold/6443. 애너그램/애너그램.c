@@ -14,11 +14,8 @@ void permutation(int current,int done)
 {
 	if(current==length)
 	{
-		if(0<strncmp(selected,last,length))
-		{
-			printf("%s\n", selected);
-			strcpy(last,selected);
-		}
+		printf("%s\n", selected);
+		strcpy(last,selected);
 		return;
 	}
 
