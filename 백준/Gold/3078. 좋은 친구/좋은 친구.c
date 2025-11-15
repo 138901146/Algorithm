@@ -23,7 +23,7 @@ int main(void)
 		friend[length[n]]++;
 	}
 
-	printf("%lld\n", sum);
+	printf("%lld", sum);
 	free(length);
 	return 0;
 }
