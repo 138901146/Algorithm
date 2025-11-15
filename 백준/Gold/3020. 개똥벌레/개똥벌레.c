@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 
 int main(void)
 {
@@ -9,17 +9,17 @@ int main(void)
 	up=(int *)calloc(H+1,sizeof(int));
 	down=(int *)calloc(H+1,sizeof(int));
 
-	stalagmite=N/2;
-	for(int n=0;n<N;n++)
+	stalagmite=N>>1;
+	for(int n=0;n<N;++n)
 	{
 		scanf("%d", &obstacle);
-		if(n%2==0)
-			down[obstacle]++;
+		if(n&1)
+			++up[obstacle];
 		else
-			up[obstacle]++;
+			++down[obstacle];
 	}
 
-	for(int h=0;h<H;h++)
+	for(int h=0;h<H;++h)
 	{
 		stalagmite-=down[h];
 		stalactite+=up[H-h];
@@ -30,10 +30,10 @@ int main(void)
 			min_count=1;
 		}
 		else if(stalagmite+stalactite==min)
-			min_count++;
+			++min_count;
 	}
 
-	printf("%d %d\n", min, min_count);
+	printf("%d %d", min, min_count);
 	free(up);
 	free(down);
 	return 0;
