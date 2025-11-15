@@ -7,7 +7,7 @@ int main(void)
 
 	scanf("%d", &C);
 
-	for(int c=0;c<C;c++)
+	while(C--)
 	{
 		int d, n;
 		long long *arr=NULL, count=0, *remain=NULL;
@@ -17,7 +17,7 @@ int main(void)
 		remain=(long long *)calloc(d,sizeof(long long));
 		remain[0]=1;
 
-		for(int i=1;i<=n;i++)
+		for(int i=1;i<=n;++i)
 		{
 			scanf("%lld", &arr[i]);
 			arr[i]+=arr[i-1];
