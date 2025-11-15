@@ -86,7 +86,7 @@ int main(void)
 		else
 			add(session[n].start);
 
-	printf("%d\n", size-1);
+	printf("%d", size-1);
 	free(pq);
 	free(session);
 	return 0;
