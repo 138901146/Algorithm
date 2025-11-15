@@ -14,14 +14,14 @@ int main(void)
 	construct_time=(int *)malloc((N+1)*sizeof(int));
 	left=(int *)malloc((N+1)*sizeof(int));
 
-	for(int n=1;n<=N;n++)
+	for(int n=1;n<=N;++n)
 		definitive[n]=(int *)malloc(N*sizeof(int));
 
-	for(int n=1;n<=N;n++)
+	for(int n=1;n<=N;++n)
 	{
 		scanf("%d", &construct_time[n]);
 		primitive[n]=(int *)malloc(N*sizeof(int));
-		for(int i=0;i<N;i++)
+		for(int i=0;i<N;++i)
 		{
 			scanf("%d", &data);
 			if(data==-1)
@@ -30,7 +30,7 @@ int main(void)
 			definitive[data][definitive_count[data]++]=n;
 		}
 
-		if(primitive_count[n]==0)
+		if(!primitive_count[n])
 			queue[rear++]=n;
 		left[n]=primitive_count[n];
 	}
@@ -39,21 +39,21 @@ int main(void)
 	{
 		int required=0;
 
-		for(int i=0;i<primitive_count[queue[front]];i++)
+		for(int i=0;i<primitive_count[queue[front]];++i)
 			required=construct_time[primitive[queue[front]][i]]>required?construct_time[primitive[queue[front]][i]]:required;
 
-		for(int i=0;i<definitive_count[queue[front]];i++)
+		for(int i=0;i<definitive_count[queue[front]];++i)
 		{
-			left[definitive[queue[front]][i]]--;
-			if(left[definitive[queue[front]][i]]==0)
+			--left[definitive[queue[front]][i]];
+			if(!left[definitive[queue[front]][i]])
 				queue[rear++]=definitive[queue[front]][i];
 		}
 
 		construct_time[queue[front]]+=required;
-		front++;
+		++front;
 	}
 
-	for(int n=1;n<=N;n++)
+	for(int n=1;n<=N;++n)
 	{
 		printf("%d\n", construct_time[n]);
 		free(primitive[n]);
