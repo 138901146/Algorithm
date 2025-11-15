@@ -7,7 +7,7 @@ int main(void)
 
 	scanf("%d", &T);
 
-	for(int t=0;t<T;t++)
+	while(T--)
 	{
 		int N, K, M, *house=NULL, sum=0, count=0;
 
