@@ -7,7 +7,7 @@ bool is_prime(int x)
 		return false;
 	else if(x==2)
 		return true;
-	else if((x&1)==0)
+	else if(!(x&1))
 		return false;
 	else
 		for(int i=3;i*i<=x;i+=2)
@@ -22,22 +22,21 @@ int main(void)
 
 	scanf("%d%d%d", &A, &B, &D);
 
-	for(int i=A;i<=B;i++)
+	for(int i=A;i<=B;++i)
 	{
 		int temp=i;
 
-		while(temp>0)
+		while(temp)
 		{
 			if(temp%10==D)
 			{
-				if(is_prime(i))
-					count++;
+				count+=is_prime(i);
 				break;
 			}
 			temp/=10;
 		}
 	}
 
-	printf("%d\n", count);
+	printf("%d", count);
 	return 0;
 }
