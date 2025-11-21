@@ -21,7 +21,7 @@ int main(void)
 		int solved=0, count=0;
 
 		for(int j=0;j<M;++j)
-			if((1<<j)&i)
+			if(1<<j&i)
 			{
 				++count;
 				solved|=solvable[j];
