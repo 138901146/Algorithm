@@ -6,6 +6,9 @@ using namespace std;
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int M, x, w, cmd;
 	map<int,int> locker;
 	vector<int> answer;
