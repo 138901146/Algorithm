@@ -9,9 +9,9 @@ int main(void)
 	long long *score=NULL;
 
 	scanf("%d", &N);
-	score=(long long *)malloc(N*sizeof(long long));
+	score=(long long *)malloc(((N>>1)+1)*sizeof(long long));
 
-	for(int i=0;i<N;++i)
+	for(int i=0;i<(N>>1)+1;++i)
 		score[i]=-1;
 
 	while(N--)
