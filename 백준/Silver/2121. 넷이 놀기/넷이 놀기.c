@@ -5,81 +5,105 @@ typedef struct
 {
 	int x, y;
 }
-coordinate;
+location;
 
-int compare(const void *x,const void *y)
+int compare(const void *primary,const void *secondary)
 {
-	return (((coordinate *)x)->x>((coordinate *)y)->x || ((coordinate *)x)->x==((coordinate *)y)->x && ((coordinate *)x)->y>((coordinate *)y)->y)?1:-1;
+	return ((location *)primary)->x<((location *)secondary)->x?-1:((location *)secondary)->x<((location *)primary)->x?1:((location *)primary)->y<((location *)secondary)->y?-1:1;
 }
 
 int main(void)
 {
 	int N, A, B, count=0;
-	coordinate *list=NULL;
+	location *dots=NULL;
 
 	scanf("%d", &N);
-	list=(coordinate *)malloc(N*sizeof(coordinate));
 	scanf("%d%d", &A, &B);
 
-	for(int n=0;n<N;n++)
-		scanf("%d%d", &list[n].x, &list[n].y);
-	qsort((void *)list,(size_t)N,sizeof(coordinate),compare);
+	dots=(location *)malloc(N*sizeof(location));
 
-	for(int n=0;n<N;n++)
+	for(int i=0;i<N;++i)
+		scanf("%d%d", &dots[i].x, &dots[i].y);
+
+	qsort((void *)dots,(size_t)N,sizeof(location),compare);
+
+	for(int i=0;i<N;++i)
 	{
-		int left=n+1, right=N-1, mid;
+		int left=i, right=N-1, mid;
 
-		while(left<=right)
+		while(left<right)
 		{
-			mid=(left+right)>>1;
+			mid=left+right>>1;
 
-			if(list[mid].x<list[n].x+A || (list[mid].x==list[n].x+A && list[mid].y<list[n].y))
-				left=mid+1;
-			else if(list[mid].x>list[n].x+A || (list[mid].x==list[n].x+A && list[mid].y>list[n].y))
+			if(dots[i].x+A<dots[mid].x)
 				right=mid-1;
+			else if(dots[mid].x<dots[i].x+A)
+				left=mid+1;
+			else if(dots[i].y<dots[mid].y)
+				right=mid-1;
+			else if(dots[mid].y<dots[i].y)
+				left=mid+1;
 			else
 				break;
 		}
-		mid=(left+right)>>1;
-		if(list[n].x+A!=list[mid].x || list[n].y!=list[mid].y)
+
+		mid=left+right>>1;
+
+		if(dots[i].x+A!=dots[mid].x||dots[i].y!=dots[mid].y)
 			continue;
 
-		left=n+1;
+		left=i;
 		right=N-1;
-		while(left<=right)
-		{
-			mid=(left+right)>>1;
 
-			if(list[mid].x<list[n].x+A || (list[mid].x==list[n].x+A && list[mid].y<list[n].y+B))
-				left=mid+1;
-			else if(list[mid].x>list[n].x+A || (list[mid].x==list[n].x+A && list[mid].y>list[n].y+B))
+		while(left<right)
+		{
+			mid=left+right>>1;
+
+			if(dots[i].x+A<dots[mid].x)
 				right=mid-1;
+			else if(dots[mid].x<dots[i].x+A)
+				left=mid+1;
+			else if(dots[i].y+B<dots[mid].y)
+				right=mid-1;
+			else if(dots[mid].y<dots[i].y+B)
+				left=mid+1;
 			else
 				break;
 		}
-		mid=(left+right)>>1;
-		if(list[n].x+A!=list[mid].x || list[n].y+B!=list[mid].y)
+
+		mid=left+right>>1;
+
+		if(dots[i].x+A!=dots[mid].x||dots[i].y+B!=dots[mid].y)
 			continue;
 
-		left=n+1;
+		left=i;
 		right=N-1;
-		while(left<=right)
-		{
-			mid=(left+right)>>1;
 
-			if(list[mid].x<list[n].x || (list[mid].x==list[n].x && list[mid].y<list[n].y+B))
-				left=mid+1;
-			else if(list[mid].x>list[n].x || (list[mid].x==list[n].x && list[mid].y>list[n].y+B))
+		while(left<right)
+		{
+			mid=left+right>>1;
+
+			if(dots[i].x<dots[mid].x)
 				right=mid-1;
+			else if(dots[mid].x<dots[i].x)
+				left=mid+1;
+			else if(dots[i].y+B<dots[mid].y)
+				right=mid-1;
+			else if(dots[mid].y<dots[i].y+B)
+				left=mid+1;
 			else
 				break;
 		}
-		mid=(left+right)>>1;
-		if(list[n].x==list[mid].x && list[n].y+B==list[mid].y)
-			count++;
+
+		mid=left+right>>1;
+
+		if(dots[i].x!=dots[mid].x||dots[i].y+B!=dots[mid].y)
+			continue;
+
+		++count;
 	}
 
-	printf("%d\n", count);
-	free(list);
+	printf("%d", count);
+	free(dots);
 	return 0;
 }
