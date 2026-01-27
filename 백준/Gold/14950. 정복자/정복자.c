@@ -14,17 +14,17 @@ int compare(const void *x,const void *y)
 
 int *parent=NULL;
 
-int find_parent(int x)
+int _find(int x)
 {
 	if(parent[x]==x)
 		return x;
 
-	return parent[x]=find_parent(parent[x]);
+	return parent[x]=_find(parent[x]);
 }
 
-int union_parent(int x,int y)
+int _union(int x,int y)
 {
-	int parent_x=find_parent(x), parent_y=find_parent(y);
+	int parent_x=_find(x), parent_y=_find(y);
 
 	if(parent_x==parent_y)
 		return 0;
@@ -41,12 +41,9 @@ int main(void)
 	edge *road=NULL;
 
 	scanf("%d%d%d", &N, &M, &t);
-
 	road=(edge *)malloc(M*sizeof(edge));
-
 	for(int i=0;i<M;++i)
 		scanf("%d%d%d", &road[i].A, &road[i].B, &road[i].C);
-
 	qsort((void *)road,(size_t)M,sizeof(edge),compare);
 
 	parent=(int *)calloc(N+1,sizeof(int));
@@ -54,7 +51,7 @@ int main(void)
 		parent[i]=i;
 
 	for(int i=0;i<M&&count<N-1;++i)
-		if(union_parent(road[i].A,road[i].B))
+		if(_union(road[i].A,road[i].B))
 			total+=(long long)count++*t+road[i].C;
 
 	printf("%lld", total);
