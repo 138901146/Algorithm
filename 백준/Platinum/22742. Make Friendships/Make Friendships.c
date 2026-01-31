@@ -40,7 +40,7 @@ int main(void)
 
 	while(N)
 	{
-		int date=0, issac_schedule_count, *issac_schedule=NULL, temp=1;
+		int date=0, issac_schedule_count, *issac_schedule=NULL;
 
 		scanf("%d", &issac_schedule_count);
 
@@ -50,11 +50,6 @@ int main(void)
 			scanf("%d", &issac_schedule[i]);
 
 		qsort((void *)issac_schedule,(size_t)issac_schedule_count,sizeof(int),compare);
-
-		for(int i=1;i<issac_schedule_count;++i)
-			if(issac_schedule[i]!=issac_schedule[i-1])
-				issac_schedule[temp++]=issac_schedule[i];
-		issac_schedule_count=temp;
 
 		schedule=(int **)malloc(N*sizeof(int *));
 		schedule_count=(int *)malloc(N*sizeof(int));
