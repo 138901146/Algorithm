@@ -11,7 +11,7 @@ int main(void)
 
 	day=(int *)malloc((N+1)*sizeof(int));
 	water=(int *)malloc((N+1)*sizeof(int));
-	queue=(int *)malloc((N+1)*sizeof(int)<<2);
+	queue=(int *)malloc((N+1)*sizeof(int)<<1);
 
 	for(int i=1;i<=N;++i)
 		day[i]=water[i]=INF;
