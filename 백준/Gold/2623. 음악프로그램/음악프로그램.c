@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<malloc.h>
 #include<stdbool.h>
 
 int main(void)
@@ -15,32 +15,32 @@ int main(void)
 	list=(int **)malloc(M*sizeof(int *));
 	queue=(int *)malloc(N*sizeof(int));
 
-	for(int m=0;m<M;m++)
+	for(int m=0;m<M;++m)
 	{
 		scanf("%d", &temp);
 		list[m]=(int *)malloc((temp+1)*sizeof(int));
 		list[m][0]=temp;
-		for(int i=1;i<=list[m][0];i++)
+		for(int i=1;i<=list[m][0];++i)
 			scanf("%d", &list[m][i]);
 
-		for(int i=2;i<=list[m][0];i++)
+		for(int i=2;i<=list[m][0];++i)
 		{
-			parent[list[m][i]]++;
-			child_count[list[m][i-1]]++;
+			++parent[list[m][i]];
+			++child_count[list[m][i-1]];
 		}
 	}
 
-	for(int n=1;n<=N;n++)
+	for(int n=1;n<=N;++n)
 	{
 		child[n]=(int *)malloc(child_count[n]*sizeof(int));
 		child_count[n]=0;
 	}
 
-	for(int m=0;m<M;m++)
-		for(int i=1;i<list[m][0];i++)
+	for(int m=0;m<M;++m)
+		for(int i=1;i<list[m][0];++i)
 			child[list[m][i]][child_count[list[m][i]]++]=list[m][i+1];
 
-	for(int n=1;n<=N;n++)
+	for(int n=1;n<=N;++n)
 		if(parent[n]==0)
 		{
 			queue[rear++]=n;
@@ -49,25 +49,25 @@ int main(void)
 
 	while(front<rear)
 	{
-		for(int i=0;i<child_count[queue[front]];i++)
-			if(--parent[child[queue[front]][i]]==0 && !visited[child[queue[front]][i]])
+		for(int i=0;i<child_count[queue[front]];++i)
+			if(!--parent[child[queue[front]][i]]&&!visited[child[queue[front]][i]])
 			{
 				visited[child[queue[front]][i]]=true;
 				queue[rear++]=child[queue[front]][i];
 			}
-		front++;
+		++front;
 	}
 
 	if(rear!=N)
-		printf("0\n");
+		printf("0");
 	else
-		for(int n=0;n<N;n++)
+		for(int n=0;n<N;++n)
 			printf("%d\n", queue[n]);
 
-	for(int m=0;m<M;m++)
-		free(list[m]);
-	for(int n=1;n<=N;n++)
-		free(child[n]);
+	while(M)
+		free(list[--M]);
+	while(N)
+		free(child[N--]);
 	free(list);
 	free(child);
 	free(child_count);
