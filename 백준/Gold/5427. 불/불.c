@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdbool.h>
 #include<malloc.h>
 
 #define INF 123456789
@@ -11,7 +12,8 @@ int main(void)
 
 	while(test_case--)
 	{
-		int w, h, **fire=NULL, **sg=NULL, *fire_queue=NULL, *sg_queue=NULL, fire_front=0, fire_rear=0, sg_front=0, sg_rear=1, escape=-1, r, c;
+		int w, h, **sg=NULL, *fire_queue=NULL, *sg_queue=NULL, fire_front=0, fire_rear=0, sg_front=0, sg_rear=1, escape=-1, r, c;
+		bool **fire=NULL;
 		char **map=NULL;
 
 		scanf("%d%d", &w, &h);
@@ -24,24 +26,23 @@ int main(void)
 			scanf("%s", map[r]);
 		}
 
-		fire=(int **)malloc(h*sizeof(int *));
+		fire=(bool **)malloc(h*sizeof(bool *));
 		sg=(int **)malloc(h*sizeof(int *));
 		fire_queue=(int *)malloc(w*h*sizeof(int));
 		sg_queue=(int *)malloc(w*h*sizeof(int));
 
 		for(r=0;r<h;++r)
 		{
-			fire[r]=(int *)malloc(w*sizeof(int));
+			fire[r]=(bool *)calloc(w,sizeof(bool));
 			sg[r]=(int *)malloc(w*sizeof(int));
 
 			for(c=0;c<w;++c)
 			{
-				fire[r][c]=INF;
 				sg[r][c]=INF;
 
 				if(map[r][c]=='*')
 				{
-					fire[r][c]=0;
+					fire[r][c]=true;
 					fire_queue[fire_rear++]=r<<10|c;
 				}
 				else if(map[r][c]=='@')
@@ -85,10 +86,10 @@ int main(void)
 				{
 					int next_r=r+dr[i], next_c=c+dc[i];
 
-					if(next_r<0||h<=next_r||next_c<0||w<=next_c||map[next_r][next_c]=='#'||fire[next_r][next_c]!=INF)
+					if(next_r<0||h<=next_r||next_c<0||w<=next_c||map[next_r][next_c]=='#'||fire[next_r][next_c])
 						continue;
 
-					fire[next_r][next_c]=fire[r][c]+1;
+					fire[next_r][next_c]=true;
 					fire_queue[fire_rear++]=next_r<<10|next_c;
 				}
 
@@ -106,9 +107,9 @@ int main(void)
 				{
 					int next_r=r+dr[i], next_c=c+dc[i];
 
-					if(next_r<0||h<=next_r||next_c<0||w<=next_c||map[next_r][next_c]=='#'||fire[next_r][next_c]!=INF||sg[next_r][next_c]!=INF)
+					if(next_r<0||h<=next_r||next_c<0||w<=next_c||map[next_r][next_c]=='#'||fire[next_r][next_c]||sg[next_r][next_c]!=INF)
 						continue;
-					else if(next_r==0||next_r==h-1||next_c==0||next_c==w-1)
+					else if(!next_r||next_r==h-1||!next_c||next_c==w-1)
 					{
 						escape=sg[r][c]+2;
 						break;
