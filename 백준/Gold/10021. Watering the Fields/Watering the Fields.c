@@ -3,8 +3,7 @@
 
 typedef struct
 {
-	int i, j;
-	long long cost;
+	int i, j, cost;
 }
 node;
 
@@ -37,8 +36,7 @@ int union_parent(int x,int y)
 
 int main(void)
 {
-	int N, C, *x=NULL, *y=NULL, edge_count=0, matched=0;
-	long long total=0;
+	int N, C, *x=NULL, *y=NULL, edge_count=0, matched=0, total=0;
 	node *edge=NULL;
 
 	scanf("%d%d", &N, &C);
@@ -79,7 +77,7 @@ int main(void)
 			total+=edge[i].cost;
 		}
 
-	printf("%lld", matched==N-1?total:-1);
+	printf("%d", matched==N-1?total:-1);
 	free(parent);
 	free(edge);
 	return 0;
