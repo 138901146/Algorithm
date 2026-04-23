@@ -1,12 +1,15 @@
-<html>
-<head><title>504 Gateway Time-out</title></head>
-<body>
-<center><h1>504 Gateway Time-out</h1></center>
-</body>
-</html>
-<!-- a padding to disable MSIE and Chrome friendly error page -->
-<!-- a padding to disable MSIE and Chrome friendly error page -->
-<!-- a padding to disable MSIE and Chrome friendly error page -->
-<!-- a padding to disable MSIE and Chrome friendly error page -->
-<!-- a padding to disable MSIE and Chrome friendly error page -->
-<!-- a padding to disable MSIE and Chrome friendly error page -->
+#include<stdio.h>
+
+int main(void)
+{
+	int t, sum=0;
+
+	for(int i=0;i<4;++i)
+	{
+		scanf("%d", &t);
+		sum+=t;
+	}
+
+	printf("%s", sum<1501?"Yes":"No");
+	return 0;
+}
