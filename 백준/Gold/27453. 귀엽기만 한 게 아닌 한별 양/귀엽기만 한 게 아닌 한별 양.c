@@ -24,7 +24,7 @@ int main(void)
 		scanf("%s", village[r]);
 	}
 
-	queue=(int *)malloc(N*M*sizeof(int)<<5);
+	queue=(int *)malloc(N*M*sizeof(int)<<2);
 	min=(status **)malloc(N*sizeof(status *));
 	for(int r=0;r<N;++r)
 	{
