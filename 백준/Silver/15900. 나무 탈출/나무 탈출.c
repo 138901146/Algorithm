@@ -8,7 +8,7 @@ typedef struct
 edge;
 
 edge *initial_list=NULL;
-int **adjacent_list=NULL, *adjacent_list_count=NULL, *parent=NULL, *depth=NULL;
+int **adjacent_list=NULL, *adjacent_list_count=NULL, *parent=NULL, *depth=NULL, total=0;
 
 void make_tree(int current)
 {
@@ -23,11 +23,14 @@ void make_tree(int current)
 			make_tree(next);
 		}
 	}
+
+	if(current!=1&&adjacent_list_count[current]==1)
+		total+=depth[current];
 }
 
 int main(void)
 {
-	int N, total=0;
+	int N;
 
 	scanf("%d", &N);
 
@@ -62,18 +65,13 @@ int main(void)
 
 	make_tree(1);
 
-	for(int i=2;i<=N;++i)
-	{
-		if(adjacent_list_count[i]==1)
-			total+=depth[i];
+	printf("%s", total&1?"Yes":"No");
+
+	for(int i=1;i<=N;++i)
 		free(adjacent_list[i]);
-	}
-	free(adjacent_list[1]);
 	free(adjacent_list);
 	free(adjacent_list_count);
 	free(parent);
 	free(depth);
-
-	printf("%s", total&1?"Yes":"No");
 	return 0;
 }
